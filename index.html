@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kikérdező – Tanácsadó szakpszichológus</title>
+<meta name="theme-color" content="#f5f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161a1c" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,600;7..72,700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#f5f1ea; --card:#fffdf9; --ink:#1d2528; --muted:#5d686c; --line:#e3ddd2; --soft:#efe9df;
+  --acc:#1f6b66; --acc-ink:#fff; --acc-soft:#dcebe8;
+  --good:#2d7a46; --good-soft:#e1f0e5; --bad:#b4442f; --bad-soft:#f7e3dd; --warn:#a86d12;
+  --serif:"Literata",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#161a1c; --card:#1f2427; --ink:#e9ecea; --muted:#9aa5a8; --line:#323a3e; --soft:#262c2f;
+  --acc:#5fb3aa; --acc-ink:#0f1a19; --acc-soft:#203634;
+  --good:#6cc28a; --good-soft:#1d3326; --bad:#ef8a73; --bad-soft:#3a231e; --warn:#e2ad55;
+  color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);
+  padding:env(safe-area-inset-top) max(14px,env(safe-area-inset-right)) calc(96px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.wrap{max-width:680px;margin:0 auto}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:8px}
+.hidden{display:none!important}
+
+/* fejléc */
+header.top{padding:22px 2px 10px}
+.eyebrow{font:600 .74rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+h1{font:700 2rem/1.1 var(--serif);margin:8px 0 6px;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0;font-size:.95rem}
+.summary{display:flex;gap:8px;margin:16px 0 6px;flex-wrap:wrap}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.85rem;color:var(--muted)}
+.pill b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* beállítások */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:14px 0}
+.panel h2{font:600 .78rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:9px;font-weight:600;font-size:.9rem;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.row + .row{margin-top:12px}
+.lbl{font-size:.9rem;font-weight:600}
+.lbl small{display:block;font-weight:400;color:var(--muted);font-size:.8rem}
+
+/* tananyag-kártyák */
+.sets-head{display:flex;justify-content:space-between;align-items:baseline;margin:22px 2px 8px}
+.sets-head h2{font:600 1.15rem/1.2 var(--serif);margin:0}
+.linkbtn{border:0;background:none;color:var(--acc);font-weight:600;font-size:.88rem;cursor:pointer;padding:6px}
+.group-title{font:600 .74rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:18px 4px 8px}
+.set{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden;transition:border-color .15s}
+.set.on{border-color:var(--acc)}
+.set-main{display:flex;gap:12px;align-items:flex-start;padding:14px;cursor:pointer}
+.chk{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--line);display:grid;place-items:center;margin-top:2px;background:var(--card)}
+.chk svg{width:14px;height:14px;opacity:0}
+.on > .set-main .chk, .chk.on{background:var(--acc);border-color:var(--acc)}
+.on > .set-main .chk svg, .chk.on svg{opacity:1}
+.chk.part{background:var(--acc-soft);border-color:var(--acc)}
+.chk.part::after{content:"";width:10px;height:2px;background:var(--acc);border-radius:2px}
+.set-txt{flex:1;min-width:0}
+.set-title{font:600 1.05rem/1.25 var(--serif);margin:0}
+.set-file{display:block;margin-top:2px;font:400 .78rem/1.3 var(--sans);color:var(--muted);word-break:break-word}
+.set-meta{color:var(--muted);font-size:.82rem;margin-top:3px}
+.badge{display:inline-block;font:700 .66rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;background:var(--acc);color:var(--acc-ink);padding:4px 7px;border-radius:6px;margin-left:6px;vertical-align:2px}
+.mastery{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{flex:1;height:6px;background:var(--soft);border-radius:99px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .g{background:var(--good)} .bar .b{background:var(--bad);opacity:.75}
+.expand{flex:none;border:0;background:var(--soft);width:34px;height:34px;border-radius:10px;cursor:pointer;display:grid;place-items:center}
+.expand svg{transition:transform .2s}
+.set.open .expand svg{transform:rotate(180deg)}
+.topics{display:none;border-top:1px solid var(--line);padding:6px 8px 10px}
+.set.open .topics{display:block}
+.topic{display:flex;gap:10px;align-items:center;padding:9px 6px;border-radius:10px;cursor:pointer}
+.topic:hover{background:var(--soft)}
+.topic .chk{width:20px;height:20px;border-radius:6px;margin:0}
+.topic .chk svg{width:12px;height:12px}
+.topic span{flex:1;font-size:.92rem}
+.topic em{font-style:normal;color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+
+/* indító sáv */
+.dock{position:fixed;left:0;right:0;bottom:0;padding:12px max(14px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));
+  background:linear-gradient(to top,var(--bg) 70%,transparent)}
+.dock .wrap{display:flex;gap:10px}
+.btn{border:0;border-radius:14px;padding:15px 18px;font-weight:700;font-size:1rem;cursor:pointer;background:var(--acc);color:var(--acc-ink);flex:1;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.small{flex:none;padding:12px 14px;font-size:.92rem}
+
+/* kvíz */
+.qbar{display:flex;align-items:center;gap:12px;padding:16px 2px 8px}
+.close{border:0;background:var(--card);border:1px solid var(--line);width:40px;height:40px;border-radius:12px;cursor:pointer;display:grid;place-items:center;flex:none}
+.prog{flex:1}
+.prog .bar{height:8px}
+.prog .bar i{background:var(--acc);transition:width .3s}
+.prog-txt{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px 18px;margin-top:10px}
+.qsrc{font-size:.78rem;color:var(--acc);font-weight:600;margin-bottom:10px}
+.qsrc .set-file{display:inline;margin:0}
+.qtext{font:600 1.28rem/1.38 var(--serif);margin:0 0 18px;text-wrap:pretty}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:13px 14px;cursor:pointer;font-size:.98rem;line-height:1.4;transition:border-color .12s,background .12s}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt:disabled{cursor:default}
+.opt .k{flex:none;width:26px;height:26px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font:700 .82rem var(--sans);color:var(--muted)}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.ok .k{background:var(--good);color:#fff}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt.no .k{background:var(--bad);color:#fff}
+.opt.dim{opacity:.55}
+.fb{margin-top:16px;border-radius:14px;padding:14px;font-size:.94rem}
+.fb.ok{background:var(--good-soft)} .fb.no{background:var(--bad-soft)}
+.fb strong{display:block;font-size:1rem;margin-bottom:2px}
+.fb.ok strong{color:var(--good)} .fb.no strong{color:var(--bad)}
+.kbd{color:var(--muted);font-size:.78rem;text-align:center;margin-top:12px}
+@media (hover:none){.kbd{display:none}}
+
+/* eredmény */
+.result{text-align:center;padding:30px 4px 8px}
+.score{font:700 4rem/1 var(--serif);font-variant-numeric:tabular-nums;margin:6px 0}
+.verdict{font:600 1.15rem/1.3 var(--serif);margin:4px 0 4px}
+.sub{color:var(--muted);font-size:.92rem}
+.miss-h{font:600 1.05rem/1.2 var(--serif);margin:26px 2px 10px}
+.miss{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.miss li{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.miss .mq{font-weight:600;margin-bottom:6px}
+.miss .ma{color:var(--good);font-weight:600}
+.miss .mw{color:var(--bad);text-decoration:line-through;text-decoration-thickness:1px}
+.miss .me{color:var(--muted);font-size:.86rem;margin-top:4px}
+.actions{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+footer{color:var(--muted);font-size:.78rem;text-align:center;margin:30px 0 10px}
+footer button{font-size:.78rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ===================== KEZDŐKÉPERNYŐ ===================== -->
+<main id="home" class="wrap">
+  <header class="top">
+    <div class="eyebrow">ELTE PPK · Tanácsadó szakpszichológus</div>
+    <h1>Kikérdező</h1>
+    <p class="lead">Jelöld be, mit szeretnél gyakorolni, aztán indulhat a kérdezés.</p>
+    <div class="summary" id="summary"></div>
+  </header>
+
+  <section class="panel" aria-label="Beállítások">
+    <div class="row">
+      <div class="lbl">Kérdések száma</div>
+      <div class="seg" id="segCount" role="group" aria-label="Kérdések száma">
+        <button data-v="10">10</button><button data-v="20">20</button><button data-v="40">40</button><button data-v="0">Mind</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="lbl">Mit kérdezzen?<small id="modeHint"></small></div>
+      <div class="seg" id="segMode" role="group" aria-label="Kérdezési mód">
+        <button data-v="mix">Vegyesen</button><button data-v="weak">Gyengébbek előre</button><button data-v="wrong">Csak hibásak</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="sets-head">
+    <h2>Tananyagok</h2>
+    <button class="linkbtn" id="toggleAll">Mind kijelöl</button>
+  </div>
+  <div id="sets"></div>
+
+  <footer>
+    <div id="footInfo"></div>
+    <button class="linkbtn" id="resetStats">Statisztika törlése</button>
+  </footer>
+</main>
+
+<div class="dock" id="dock"><div class="wrap">
+  <button class="btn" id="start" disabled>Indítás</button>
+</div></div>
+
+<!-- ===================== KVÍZ ===================== -->
+<main id="quiz" class="wrap hidden" aria-live="polite">
+  <div class="qbar">
+    <button class="close" id="quit" aria-label="Kilépés a menübe">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+    </button>
+    <div class="prog">
+      <div class="bar"><i id="progFill" style="width:0"></i></div>
+      <div class="prog-txt"><span id="progTxt"></span><span id="scoreTxt"></span></div>
+    </div>
+  </div>
+  <div class="qcard">
+    <div class="qsrc" id="qsrc"></div>
+    <p class="qtext" id="qtext"></p>
+    <div class="opts" id="opts"></div>
+    <div id="fb"></div>
+  </div>
+  <div class="kbd">Billentyűk: 1–4 a válaszhoz, Enter a továbblépéshez</div>
+</main>
+
+<div class="dock hidden" id="qdock"><div class="wrap">
+  <button class="btn" id="next">Következő</button>
+</div></div>
+
+<!-- ===================== EREDMÉNY ===================== -->
+<main id="result" class="wrap hidden"></main>
+
+<script>
+/* =========================================================
+   TANANYAGOK – minden új anyag egy TANANYAG({...}) blokk.
+   Formátum:
+   TANANYAG({ id, cim, targy, forras, fajl:"forrásfájl neve", felveve:"ÉÉÉÉ-HH-NN",
+     temak:[ { cim, kerdesek:[ {q:"kérdés", o:["HELYES","rossz","rossz","rossz"], e:"magyarázat"} ] } ] })
+   Az o[0] mindig a helyes válasz – a program keveri.
+   ========================================================= */
+const SETS = [];
+function TANANYAG(s){ SETS.push(s); }
+/* ---- 01-definicio.js ---- */
+TANANYAG({
+  id: "pt01-definicio",
+  cim: "01 · Meghatározás, keretek",
+  targy: "Pszichológiai tanácsadás – elméleti összefoglaló",
+  forras: "Kissné Viszket Mónika, ELTE PPK (diasor)",
+  fajl: "Pszichológiai Tanácsadás 01 definíció, keret.pptx",
+  felveve: "2026-11-22",
+  temak: [
+    {
+      cim: "Definíciók",
+      kerdesek: [
+        {q: "Ritoók Magda szerint a pszichológiai tanácsadás melyik tevékenységrendszerbe tartozik?",
+         o: ["A professzionális segítő kapcsolati tevékenységek rendszerébe", "Az egészségügyi gyógyító tevékenységek rendszerébe", "A pszichoterápiás eljárások rendszerébe", "A pedagógiai szakszolgálati tevékenységek rendszerébe"],
+         e: "Ritoók (2003): a segítő kapcsolati tevékenységek a legszélesebb értelemben vett egészséges társadalmi alkalmazkodást szolgálják, ezek egyike a tanácsadás."},
+        {q: "Melyik jellemzés illik Ritoók tanácsadás-definíciójára?",
+         o: ["Viszonylag rövid távú, interperszonális, elméleti alapú, etikai és jogi normák által irányított", "Hosszú távú, feltáró, a tudattalan konfliktusokra irányuló", "Rövid, információközlő, szakmai normáktól független", "Medikális modellre épülő, diagnózisközpontú"],
+         e: "„A tanácsadás: viszonylag rövid távú, interperszonális, elméleti alapú, etikai és jogi normák által irányított szakmai tevékenység…”"},
+        {q: "Ritoók definíciója szerint mi a tanácsadás fő célja?",
+         o: ["Pszichológiailag alapvetően egészséges személyeknek segíteni fejlődési és szituációs problémáik megoldásában", "Pszichiátriai zavarok tüneteinek megszüntetése", "A személyiség teljes átstrukturálása", "Kizárólag pályaválasztási információ nyújtása"],
+         e: "A célcsoport a pszichológiailag alapvetően egészséges személy, a fókusz a fejlődési és szituációs problémák."},
+        {q: "Buda Béla (2009) szerint mi indokolhatja tanácsadás alkalmazását olyan problémáknál, amelyek akár pszichoterápiát is indikálhatnának?",
+         o: ["Az időtényező és/vagy a beavatkozás sürgőssége", "A kliens anyagi helyzete", "A pszichoterapeuták hiánya", "A diagnózis bizonytalansága"],
+         e: "Buda B.: a tanácsadás korlátozott célokat követ; alkalmazását indokolhatja az időtényező és/vagy a beavatkozás sürgőssége."},
+        {q: "Az Európai Tanácsadási Társaság (EAC, 2002) definíciója szerint mi a tanácsadás?",
+         o: ["Interaktív tanulási folyamat szerződő felek között, holisztikus (biopszichoszociális) megközelítéssel", "Egyirányú tanácsadás a szakértő részéről", "Rövid krízisintervenció kizárólag egyéneknek", "Orvosi felügyelet alatt végzett terápiás eljárás"],
+         e: "EAC: interaktív tanulási folyamat a szerződő tanácsadó(k) és kliens(ek) – egyének, családok, csoportok, intézmények – között, holisztikus megközelítéssel."},
+        {q: "Kinek a meghatározása: „A tanácsadási munka segít az önállóvá válásban a döntések, érzelmi problémák, konfliktusmegoldások és a munkába bevitt lelki helyzetek kezelésében”?",
+         o: ["Bagdy Emőke (2009)", "Buda Béla (2009)", "Ritoók Magda (2003)", "Wiegersma (1976)"],
+         e: "Ez Bagdy E. (2009) megfogalmazása."},
+        {q: "A EuroPsy (2013) tanácsadás-definíciója szerint hogyan helyezi el a tanácsadás a jelentkezőt?",
+         o: ["Nem az egészség–betegség dimenzióban", "A betegség-dimenzió enyhe pólusán", "Pszichopatológiai kategóriák szerint", "Kizárólag életkori szakasz szerint"],
+         e: "A definíció szerint a tanácsadás döntési, problémamegoldó képességet fejleszt, aktív részvételt vár el, és nem az egészség–betegség dimenzióban helyezi el a jelentkezőt."},
+        {q: "Mit vár el a klienstől a tanácsadás a EuroPsy-definíció szerint?",
+         o: ["Aktív részvételt", "Passzív befogadást", "Orvosi beutalót", "Előzetes diagnózist"],
+         e: "A tanácsadás lehetővé teszi, illetve elvárja az aktív részvételt."}
+      ]
+    },
+    {
+      cim: "Wiegersma szintjei",
+      kerdesek: [
+        {q: "Kinek az elméleti koncepciója írja le a tanácsadás az információadástól a pszichoterápiáig mélyülő tevékenységrendszerét?",
+         o: ["Wiegersma S. (1976)", "Carl Rogers (1951)", "Egan (2016)", "Argelander (2006)"],
+         e: "A tanácsadás formáit és szakmai határait Wiegersma (1976) koncepciója alapján fogalmazzák meg."},
+        {q: "Hány szintet különít el a Wiegersma-féle modell?",
+         o: ["Ötöt", "Hármat", "Négyet", "Hatot"],
+         e: "1. információs tanácsadás, 2. konzultáció, 3. tanácsadás, 4. fokális tanácsadás, 5. pszichoterápia."},
+        {q: "Melyik a Wiegersma-modell 2. szintje?",
+         o: ["Konzultáció", "Információs tanácsadás", "Fokális tanácsadás", "Pszichoterápia"],
+         e: "A 2. szint a konzultáció: személyre szabott információadás, a döntés és értékelés szempontjainak kidolgozása."},
+        {q: "Melyik a Wiegersma-modell 4. szintje?",
+         o: ["Fokális tanácsadás", "Konzultáció", "Tanácsadás", "Információs tanácsadás"],
+         e: "4. szint: fokális tanácsadás – a probléma fókuszba helyezése, komoly önismereti munka kell."},
+        {q: "„A döntéshozási helyzet nem világos, de reálisak a választási lehetőségek, és a személy kis segítséggel képes önállóan dönteni.” Melyik szint?",
+         o: ["1. szint – információs tanácsadás", "2. szint – konzultáció", "3. szint – tanácsadás", "4. szint – fokális tanácsadás"],
+         e: "Mindennapi problémák; általános, többrétű információnyújtás a lehetőségekről és következményeikről."},
+        {q: "„Sok információ hiányzik, több ellentétes szempontot kell figyelembe venni, a személy bizonytalan.” Melyik szint?",
+         o: ["2. szint – konzultáció", "1. szint – információs tanácsadás", "3. szint – tanácsadás", "5. szint – pszichoterápia"],
+         e: "Konzultáció: személyre szabott információadás, a döntés és értékelés főbb szempontjait ki kell dolgozni."},
+        {q: "„Komoly belső konfliktusok, bizonytalan jövőkép, irreális, inkonzisztens vágyak, problémás motivációk.” Melyik szint?",
+         o: ["3. szint – tanácsadás", "2. szint – konzultáció", "4. szint – fokális tanácsadás", "5. szint – pszichoterápia"],
+         e: "Tanácsadás: a feszültség csökkentése, reális helyzetértékelés, támogatás a konfliktusok megértésében és megoldásában."},
+        {q: "„A problémák kiterjedt köre mélyen gyökerezik a személyiség belső életében: irreális igények, éretlen kapcsolatok, szorongás – neurotikus problémák.” Melyik szint?",
+         o: ["4. szint – fokális tanácsadás", "3. szint – tanácsadás", "5. szint – pszichoterápia", "2. szint – konzultáció"],
+         e: "Fokális tanácsadás: a döntéshez komoly önismereti munka szükséges, szükség esetén pszichoterápia."},
+        {q: "Mi a konzultáció célja az 5. szinten (integrációhiány, pszichés vagy organikus patológia)?",
+         o: ["Az integráció elősegítése, a kliens továbbküldése pszichoterápiára", "Általános információnyújtás", "Reális helyzetértékelés kialakítása", "A döntési szempontok kidolgozása"],
+         e: "Az 5. szint a pszichoterápia: a tanácsadó feladata a továbbküldés."}
+      ]
+    },
+    {
+      cim: "Fókusz, tevékenység, munkaterület",
+      kerdesek: [
+        {q: "Az APA meghatározása szerint mi kerül fókuszba a tanácsadó szakpszichológiában?",
+         o: ["A tipikus élet-stresszorok és a súlyos kimenetelek", "Kizárólag a súlyos mentális zavarok", "Csak a gyermekkori fejlődési zavarok", "Csak a munkahelyi teljesítmény"],
+         e: "APA: bármely életkorban; célja megtalálni az érzelmek kapcsolatát a társas, munkahelyi, iskolai és fizikai egészséggel."},
+        {q: "Milyen perspektívákon keresztül történik a tanácsadás szakpszichológiájában a probléma meghatározása?",
+         o: ["Fejlődés (életút), környezet és kultúra", "Tünet, szindróma és diagnózis", "Tudattalan, tudatelőttes és tudatos", "Genetika, neurobiológia és farmakológia"],
+         e: "A problémameghatározás a fejlődés (életút), a környezet és a kultúra perspektíváján keresztül történik."},
+        {q: "Melyik NEM tartozik a tanácsadó szakpszichológus speciális fókuszai közé?",
+         o: ["A pszichopatológiai kórképek feltáró terápiája", "Egészséges működések és a kliens erősségei", "Környezeti és szituációs hatások", "Karrier- és munkaszerepek"],
+         e: "A fókusz: egészséges működések és erősségek, környezeti hatások, kimenetek sokfélesége és társas támasz, karrier- és munkaszerepek."},
+        {q: "Melyik koncepció kötődik Oláh Attilához (2004) az egészséges pszichés működés elméleti hátterében?",
+         o: ["Pszichológiai immunrendszer", "Pszichoszociális fejlődési szakaszok", "Szükségletelmélet", "Személyes konstrukciók elmélete"],
+         e: "Oláh A.: pszichológiai immunrendszer – az egészségesség kritériumai. Erikson: fejlődési érettség; Grawe, Epstein: szükségletek."},
+        {q: "Melyik NEM tartozik a tanácsadás kiemelt pszichés funkciói közé?",
+         o: ["Absztrakt logikai képesség", "Kötődés, bizalom, intimitás", "Autonómia–dependencia, kontrollképesség", "Identitás, énintegritás, önbecsülés"],
+         e: "Az öt kiemelt funkció: kötődés–bizalom–intimitás; autonómia–dependencia–kontroll; teljesítmény–kompetencia; fejlődési potenciál; identitás–énintegritás–önbecsülés."},
+        {q: "Mit NEM végez a tanácsadó szakpszichológus?",
+         o: ["Feltáró önismereti terápiát és pszichopatológiai probléma kezelését", "Krízisintervenciót", "Kiégés megelőzését és kezelését", "Szakmai szupervíziót"],
+         e: "A dia szerint két dolgot nem végez: feltáró önismereti terápiát és pszichopatológiai probléma kezelését."},
+        {q: "Melyik szerepel a tanácsadó szakpszichológus tevékenységi formái között?",
+         o: ["Teszt-alkotás és validálás", "Gyógyszeres kezelés beállítása", "Kényszergyógykezelés elrendelése", "Feltáró önismereti terápia"],
+         e: "Tevékenységi formák pl.: egyéni, családi, csoportos tanácsadás; krízisintervenció; kiégés megelőzése; szupervízió; teszt-alkotás és validálás; kutatás."},
+        {q: "Mi a tanácsadó szakpszichológus teendője pszichopatológiai probléma esetén?",
+         o: ["A kliens továbbirányítása megfelelő szakemberhez", "Saját maga kezdi el a pszichoterápiát", "Gyógyszert javasol", "Lezárja a kapcsolatot továbbküldés nélkül"],
+         e: "Ismeri saját kompetenciahatárait; pszichopatológiai probléma esetén továbbirányít, és együttműködik a társszakmákkal."},
+        {q: "Melyik szerepel a tanácsadó szakpszichológus foglalkoztatási színterei között?",
+         o: ["Menekültügyi központok", "Pszichiátriai zárt osztály önálló kezelőorvosaként", "Gyógyszertár", "Bíróság ítélkező tanácsa"],
+         e: "Pl. pedagógiai szakszolgálatok, családsegítők, gyermekjóléti szolgálatok, felsőoktatási tanácsadók, menekültügyi központok, lelki segélyszolgálatok, drogambulanciák stb."},
+        {q: "Csoportokkal és szervezetekkel dolgozva milyen eszközökkel végez felmérést a tanácsadó szakpszichológus?",
+         o: ["Interjúkkal, kérdőívekkel és a célterületen végzett megfigyeléssel", "Kizárólag projektív tesztekkel", "Kizárólag orvosi leletek alapján", "Csak a vezetők beszámolói alapján"],
+         e: "Interjúk, kérdőívek és megfigyelések mentén dolgozza ki és hajtja végre az intervenciókat."}
+      ]
+    }
+  ]
+});
+
+/* ---- 02-tortenetiseg.js ---- */
+TANANYAG({
+  id: "pt02-tortenetiseg",
+  cim: "02 · Történetiség",
+  targy: "Pszichológiai tanácsadás – elméleti összefoglaló",
+  forras: "Kissné Viszket Mónika, ELTE PPK (diasor)",
+  fajl: "Pszichológiai Tanácsadás 02 történetiség.pptx",
+  felveve: "2026-11-22",
+  temak: [
+    {
+      cim: "Fogalmak és történet",
+      kerdesek: [
+        {q: "Milyen szóból ered a „tanácsadás”, és mit jelent?",
+         o: ["Latin „consulere”: konzultálni, tanácskozni", "Görög „kline”: ágy", "Latin „consilium”: döntés", "Görög „therapeia”: gyógyítás"],
+         e: "A consulere a tanácsadás segítő, konzultáló jellegét jelzi."},
+        {q: "Mire utal a „klinikai” szó görög eredete (kline)?",
+         o: ["Ágy – a beteg ágya mellett nyújtott kezelésre", "Tanácskozás – a közös döntésre", "Lélek – a belső világra", "Út – a fejlődési útra"],
+         e: "A klinikai gyakorlat eredetileg a beteg ágya mellett nyújtott kezelésre vonatkozott."},
+        {q: "Ki alapította 1908-ban a Bostoni Pályaválasztási Irodát?",
+         o: ["Frank Parsons", "Carl Rogers", "Hugo Münsterberg", "John B. Watson"],
+         e: "Parsons 1909-ben kiadta a Pályaválasztás (Choosing a Vocation) című könyvet is."},
+        {q: "Mi jellemezte a tanácsadást az 1930-as években?",
+         o: ["Bővülő terület – Rogers terápiás tanácsadása", "A pályaválasztás teljes eltűnése", "Az első etikai kódex megszületése", "Az ELTE-képzés elindulása"],
+         e: "A dia szerint a 30-as évek: bővülő terület (Rogers – terápiás tanácsadás)."},
+        {q: "Mikor jelent meg az első tanácsadási képzést szolgáló kézikönyv?",
+         o: ["1943-ban", "1908-ban", "1951-ben", "1993-ban"],
+         e: "1943: első tanácsadási képzési kézikönyv."},
+        {q: "Mit hozott létre az APA 1945-ben?",
+         o: ["A „Division of Personnel and Guidance Psychologists”-t", "A „Division of Counseling Psychology”-t", "Az első etikai kódexet", "Az ABEPP vizsgabizottságot"],
+         e: "1945: Division of Personnel and Guidance Psychologists; ebből lett 1951-ben a Division of Counseling Psychology."},
+        {q: "Melyik évben lett a „Division of Personnel and Guidance Psychologists”-ből „Division of Counseling Psychology”?",
+         o: ["1951", "1945", "1952", "1960"],
+         e: "1951-ben nevezték át; 1952-ben megalakult az APA tanácsadás-pszichológiai tagozata."},
+        {q: "Miért változott meg a klinikai és tanácsadó pszichológusok szerepe a II. világháború után?",
+         o: ["A háborúból visszatérő férfiakat segíteni kellett a társadalomba való újraintegrálódásban", "Megszűnt a pályaválasztási tanácsadás iránti igény", "A pszichiáterek átvették a tanácsadást", "Betiltották a pszichoterápiát"],
+         e: "Az USA veteránkórházai nagyszámú klinikai és tanácsadó pszichológust foglalkoztattak."},
+        {q: "Mi jellemezte az 1960–70-es éveket a tanácsadás történetében?",
+         o: ["Etikai kódex, törvényi szabályozás, új elméletek, megjelent a csoportos tanácsadás", "Az első pályaválasztási iroda megnyitása", "A tanácsadás teljes beolvadása a klinikai pszichológiába", "A pszichoanalízis kizárólagossága"],
+         e: "Nőtt az alkalmazási területek száma, és pontosabban megjelentek a képzési, specializálódási irányok."},
+        {q: "Milyen új hangsúly jelent meg az 1980-as évek elején?",
+         o: ["Az egész élet folyamára kiterjedő fejlesztési tanácsadás", "A kizárólagos pályaválasztási fókusz", "A gyógyszeres kezelés előtérbe kerülése", "Az online tanácsadás"],
+         e: "Az 1980-as évek elején a fejlesztési (élethosszig tartó) tanácsadás kap fontos szerepet."},
+        {q: "Mikor indult a Tanácsadó Szakpszichológus szakirányú továbbképzés az ELTE-n?",
+         o: ["1993-ban", "1979-ben", "2005-ben", "2007-ben"],
+         e: "Hazánkban a modern tanácsadás a 80-as évek második felétől, a 90-es évek elejétől látható; 1993-ban indult a képzés."},
+        {q: "Mire fókuszál történetileg a tanácsadás-pszichológia?",
+         o: ["Az egészséges kliens populációra, az egész élettartamra jellemző erősségekre és adaptív stratégiákra", "A súlyos, tartós mentális zavarokra", "A pszichiátriai rehabilitációra", "Kizárólag a gyermekpopulációra"],
+         e: "A cél a döntés, a változtatni tudás, a megküzdés, a kompetens, önálló pálya- vagy életalakítás."}
+      ]
+    },
+    {
+      cim: "Guidance és counselling",
+      kerdesek: [
+        {q: "A kezdeti megkülönböztetés szerint mire összpontosít az irányítás (guidance)?",
+         o: ["Arra, hogy fontos választásokra irányuló döntésekben segítse az egyént", "Arra, hogy a változások végrehajtásában segítse az egyént", "A tünetek megszüntetésére", "A tudattalan feltárására"],
+         e: "Guidance: döntések segítése; counselling: a változások végrehajtásának segítése."},
+        {q: "A kezdeti megkülönböztetés szerint mi a tanácsadás (counselling) célja?",
+         o: ["Az egyéneket a változások végrehajtásában segíteni", "Kizárólag pályaválasztási döntést hozni", "Diagnózist felállítani", "Információt közvetíteni a szülőknek"],
+         e: "A counselling célja a változások végrehajtásának támogatása."},
+        {q: "Kiknél jelent meg kezdetben a „guidance” mint szakmai megközelítés?",
+         o: ["Gyerekeknél és fiataloknál, a pályaválasztással kapcsolatban", "Időseknél, a nyugdíjba vonulás kapcsán", "Veteránoknál, a trauma kapcsán", "Pároknál, a válás kapcsán"],
+         e: "Ma már nem korlátozódik életkori csoportokra (munka-, szervezeti, karriertanácsadás az egész életre)."},
+        {q: "Miért használják egyre gyakrabban a „counsellor” kifejezést a „tanácsadó” helyett (Szilágyi K., 1993)?",
+         o: ["Hogy elhatárolódjanak a szó jelentéséből adódó „tanácsot adó” feladatkörtől", "Mert a magyar szó jogilag védett", "Mert a counsellor orvosi végzettséget jelent", "Mert az angol szó rövidebb"],
+         e: "A tanácsadó nem tanácsot ad, hanem konzultál – ezt jelzi a counsellor kifejezés."}
+      ]
+    },
+    {
+      cim: "Tanácsadás és pszichoterápia",
+      kerdesek: [
+        {q: "Raque-Bogdan és mtsai (2012) kutatásában a kiképzők értékeléseinek hány százaléka nem tett különbséget a klinikai és a tanácsadó pszichológia között?",
+         o: ["87%", "50%", "13%", "100%"],
+         e: "Az értékelések 87%-a nem tett különbséget; ahol van különbség, az a fókuszban és a nézőpontban van."},
+        {q: "Raque-Bogdan és mtsai (2012) szerint miben különbözik a tanácsadás a klinikai pszichológiától?",
+         o: ["Inkább a jóllétre, egyéni különbségekre és prevencióra fókuszál, kevésbé medikális modellben gondolkodik", "Inkább a medikális modellre és a diagnózisra fókuszál", "Csak csoportos formában dolgozik", "Nem használ elméleti hátteret"],
+         e: "A tanácsadás célja az egyéni produktivitás növelése, hangsúlya a prevención van."},
+        {q: "Hogyan jellemzi az összehasonlító táblázat a tanácsadás kliensét?",
+         o: ["Kliens, sine morbo probléma – megoldáskereső személy életvezetési, párkapcsolati, döntési feszültségben", "Páciens, a betegszerepben", "Kizárólag kiskorú, akit a szülő hoz", "Pszichiátriai diagnózissal rendelkező beteg"],
+         e: "Pszichoterápiában a páciens a „beteg”; a tanácsadásban kliens, betegség nélküli (sine morbo) problémával."},
+        {q: "Milyen szakmai ismeretek szükségesek a tanácsadó számára (szemben a terapeuta klinikai patopszichológiai ismereteivel)?",
+         o: ["Konfliktuskezelési, döntéspszichológiai, mediációs, krízislélektani, rendszerszemléleti, személyiségpszichológiai", "Kizárólag patodinamikai és farmakológiai", "Csak pályalélektani", "Neurológiai és pszichiátriai"],
+         e: "A pszichoterapeutától klinikai patopszichológiai és patodinamikai szakismeret várható el."},
+        {q: "Mi a lélektani munka célja a tanácsadásban az összehasonlító táblázat szerint?",
+         o: ["Saját erőforrásokból merítő önálló egyensúlyteremtés, tudatosság, személyes hatékonyság és megküzdési képesség", "Tünetmentesség és gyógyulás elérése", "A tudattalan konfliktusok teljes feldolgozása", "A diagnózis pontosítása"],
+         e: "Pszichoterápiában: állapotjavulás, gyógyulás, tünetmentesség."},
+        {q: "Mi a munka fókusza a tanácsadásban?",
+         o: ["A behozott probléma", "A rejtett oki háttér és a nukleáris konfliktus", "A korai gyermekkori traumák teljes feltárása", "A tünetek"],
+         e: "Tanácsadás: emocionális megértés, belátás, szemléletváltás révén a problémafókusz átdolgozása; fókusz a behozott probléma."},
+        {q: "Mi határolja be a tanácsadás tevékenységi határait?",
+         o: ["A problémafókusz által behatárolt személyiségi és magatartási szféra", "A páciens pszichológiai munkaképessége a terápiás hic et nunc szerint", "A biztosító által finanszírozott óraszám", "A kliens életkora"],
+         e: "A hic et nunc által meghatározott munkaképesség a pszichoterápia határa."}
+      ]
+    },
+    {
+      cim: "Szupportív és expresszív (Flaskay)",
+      kerdesek: [
+        {q: "Flaskay (2010) szerint hogyan kezeli a szupportív (nem feltáró) módszer – pl. a tanácsadás – az elhárításokat?",
+         o: ["Megerősíti, támogatja őket", "Szembesít velük, változtatásra törekszik", "Figyelmen kívül hagyja őket", "Értelmezi és lebontja őket"],
+         e: "Az expresszív módszer szembesít az elhárításokkal."},
+        {q: "Hogyan kezeli a szupportív módszer a szorongást?",
+         o: ["Minimális szinten tartja", "Optimális szinten tartja", "Fokozza a feltárás érdekében", "Gyógyszerrel szünteti meg"],
+         e: "Expresszív módszer: optimális szinten tartás."},
+        {q: "Hogyan viszonyul a szupportív módszer az áttételhez?",
+         o: ["Elfogadja, minimális szinten tartja", "Feltámasztja és elemzi", "Kötelezően értelmezi", "Tiltja"],
+         e: "Az expresszív módszer feltámasztja, kiteljesedését segíti és elemzi."},
+        {q: "Mi a szupportív módszer viszonya a regresszióhoz?",
+         o: ["Kerüli", "Az ülések alatt megengedi", "Kifejezetten előidézi", "Csak csoportban engedi"],
+         e: "Az expresszív módszerben a regresszió az ülések alatt megengedett."},
+        {q: "Hogyan kezeli a szupportív módszer az álmokat?",
+         o: ["Elfogadja, de nem bátorítja", "Bátorít az elmondásukra", "Tiltja a róluk való beszédet", "Minden ülésen elemzi"],
+         e: "Expresszív: bátorítás az álmok elmondására."},
+        {q: "Melyik NEM közös a szupportív és az expresszív megközelítésben?",
+         o: ["Az áttétel feltámasztása és elemzése", "A problémák terhének megosztása", "Az érzések, indulatok ventiláltatása", "A kapcsolat megbízhatósága időben és térben"],
+         e: "Közös: teher megosztása, ventilálás, értékítélet-mentes légkör, holding/tartalmazás, megbízható kapcsolat."},
+        {q: "A diasoron a Flaskay-táblázat mellett mi szerepel a „Tanácsadás plusz” címszó után?",
+         o: ["Fókusz, cél, eredményorientáltság", "Feltárás, értelmezés, átdolgozás", "Diagnózis, kezelés, utánkövetés", "Empátia, elfogadás, hitelesség"],
+         e: "Tanácsadás plusz – fókusz, cél, eredményorientáltság."}
+      ]
+    }
+  ]
+});
+
+/* ---- 03-kompetenciak.js ---- */
+TANANYAG({
+  id: "pt03-kompetenciak",
+  cim: "03 · Kompetenciák",
+  targy: "Pszichológiai tanácsadás – elméleti összefoglaló",
+  forras: "Kissné Viszket Mónika, ELTE PPK (diasor)",
+  fajl: "Pszichológiai Tanácsadás 03 kompetenciák QR kóddal.pptx",
+  felveve: "2026-11-22",
+  temak: [
+    {
+      cim: "ABEPP, APA, nemzetközi jegyzékek",
+      kerdesek: [
+        {q: "Mit jelent az ABEPP rövidítés?",
+         o: ["American Board of Examiners in Professional Psychology", "American Board of Educational Psychology Programs", "Association of British and European Professional Psychologists", "American Bureau of Ethics in Professional Practice"],
+         e: "Az Amerikai Pszichológiai Szakmai Vizsgabizottság; az APA támogatásával dolgozta ki és ellenőrzi a szakmai működés minőségét."},
+        {q: "Melyik két területet ismerte el az ABEPP megalakulásakor, 1947-ben?",
+         o: ["A tanácsadás és a klinikai pszichológiát", "A munka- és az iskolapszichológiát", "A neuropszichológiát és a törvényszéki pszichológiát", "A pár- és családpszichológiát és a csoportpszichológiát"],
+         e: "Azóta esernyőszervezetként 14 specializáció felügyeletét látja el."},
+        {q: "Hány specializáció felügyeletét látja el ma az ABEPP esernyőszervezetként?",
+         o: ["14", "6", "20", "9"],
+         e: "Pl. 1949 munka- és szervezet, 1968 iskola, … 2010 rendvédelmi pszichológia."},
+        {q: "Milyenek voltak a kezdeti kompetencia-modellek?",
+         o: ["Készségalapúak – mikroszkillek gyűjteményei", "Kizárólag attitűdalapúak", "Metakompetencia-alapúak", "Eredményalapú integratív modellek"],
+         e: "Ezt a szűkítést kritizálta később Kaslow (2004) és Ridley és mtsai (2011)."},
+        {q: "Az APA etikai szabályzatának mely pontjai központiak a kompetenciahatárok és a kompetenciák fenntartása szempontjából?",
+         o: ["A 2.01 és a 2.03", "Az 1.01 és az 1.02", "A 3.04 és a 3.05", "A 4.01 és a 4.07"],
+         e: "A 2.01 és 2.03 pontok."},
+        {q: "Mit tartalmaz a 2002-es Kompetencia Konferencia nyomán született Minimum Készségek Dokumentuma?",
+         o: ["15 alapkompetenciát a szakmai fejlődés három szintjén", "20 alapkompetenciát 6 munkaköri feladatnál", "9 metakompetenciát", "4 kapcsolódó konstruktumot"],
+         e: "Három szint: készen állás a gyakorlatra, a gyakornokságra és a szakmai munka megkezdésére; viselkedéses indikátorokkal."},
+        {q: "Melyik a Minimum Készségek Dokumentumának szakmai fejlődési szintje?",
+         o: ["Készen állás a gyakornokságra", "Mesterfokozat", "Szupervizori szint", "Kutatói szint"],
+         e: "Készen állás a gyakorlatra, a gyakornokságra, a szakmai munka megkezdésére."},
+        {q: "Melyik szervezet dolgozott ki elsőként képzéshez kapcsolódó kompetencia-jegyzéket a tanácsadás területén (2003)?",
+         o: ["Az IAEVG (nevelési és pályaválasztási tanácsadás nemzetközi szervezete)", "A CEDEFOP", "Az EFPA", "A BACP"],
+         e: "„Oktatási és Pályatanácsadó Szakemberek Nemzetközi Kompetenciái” (2003)."},
+        {q: "Mit jelentetett meg a CEDEFOP 2009-ben?",
+         o: ["Panoráma füzetet az európai pályatanácsadók képzési rendszereinek összevetéséről", "Az első tanácsadói etikai kódexet", "A EuroPsy tanúsítvány szabályzatát", "A Minimum Készségek Dokumentumát"],
+         e: "Az európai életpálya-, karrier-, pályatanácsadók képzési rendszereit vetette össze."}
+      ]
+    },
+    {
+      cim: "Kritikák és a Ridley-modell",
+      kerdesek: [
+        {q: "Mitől óvott Kaslow (2004) kritikája?",
+         o: ["Hogy a szakmát néhány specifikus készségre redukálják, és technikusokat képezzenek szakemberek helyett", "Hogy túl sok elméletet tanítsanak", "Hogy a kompetenciákat egyáltalán definiálják", "Hogy a képzés túl hosszú legyen"],
+         e: "„…technikusokat képezzenek szakemberek helyett.” (p. 779)"},
+        {q: "Melyik NEM Ridley, Mollen és Kelly (2011) kritikája a korábbi kompetencia-meghatározásokkal szemben?",
+         o: ["Túlságosan a viselkedéses elemekre és az eredményre koncentrál", "A kompetencia definíciója túlegyszerűsítő és ellentmondásos", "A kognitív és affektív elemekre limitálja a figyelmet", "Több indikátor inkább leíró, mint előíró"],
+         e: "Ridley és mtsai épp azt kifogásolták, hogy a modellek a kognitív és affektív elemekre szűkítenek."},
+        {q: "Kiknek a sokat idézett definíciója: a kompetencia „a kommunikáció, tudás, technikai készségek, klinikai értelmezés, érzelmek, értékek és reflexiók szokás szintű és megfontolt használata a napi gyakorlatban”?",
+         o: ["Epstein és Hundert (2002)", "Ridley, Mollen és Kelly (2011)", "Sexton, Ridley és Kleiner (2004)", "Kaslow (2004)"],
+         e: "Alapja az „elme szokásai”: figyelmesség, kritikus kíváncsiság, öntudatosság és jelenlét."},
+        {q: "Epstein és Hundert szerint mi a kompetencia alapja?",
+         o: ["Az „elme szokásai”: figyelmesség, kritikus kíváncsiság, öntudatosság, jelenlét", "A lexikális tudás mennyisége", "A szupervízióban töltött órák száma", "A mikrokészségek begyakorlottsága"],
+         e: "Habits of mind."},
+        {q: "Melyik négy, egymással kapcsolatban álló konstruktumra épül Ridley–Mollen–Kelly (2011) modellje?",
+         o: ["Tanácsadói kompetencia, alkompetenciák, mikrokészségek, teljesítmény", "Tudás, készség, attitűd, érték", "Célmeghatározás, felmérés, beavatkozás, értékelés", "Empátia, elfogadás, hitelesség, jelenlét"],
+         e: "Ezek mentén építették fel a kompetencia-modellt."},
+        {q: "Mi a tanácsadói kompetencia Ridley és mtsai szerint?",
+         o: ["A pozitív terápiás eredmények meghatározása, elősegítése és értékelése", "A mikrokészségek hibátlan kivitelezése", "Egyetlen jól begyakorolt technika", "A kliens elégedettsége"],
+         e: "Alkompetenciákat és mikrokészségeket koordinál és integrál a terápiás eredmény érdekében."},
+        {q: "Mi igaz az alkompetenciákra?",
+         o: ["Egyedi célt szolgálnak a terápiás változás folyamatában, de önmagukban nincs terápiás értékük", "Önmagukban is terápiás értékkel bírnak", "Csak viselkedésesek lehetnek", "Nem értékelhetők sztenderdek szerint"],
+         e: "Lehetnek információsak, metakognitívek és viselkedésesek."},
+        {q: "Hogyan definiálja a modell a teljesítményt?",
+         o: ["A készség megjelenésének szintje egy kompetencia vagy mikrokészség kivitelezése során, kontinuum mentén a rossztól a kivételesig", "A kliensek számának összessége", "A tanácsadó elméleti tudása", "A szupervízori értékelés pontszáma"],
+         e: "A teljesítmény viselkedéses aktivitás, viselkedés szintjén értékelhető."},
+        {q: "Hány alapelv támasztja alá a tanácsadói kompetencia definícióját?",
+         o: ["Tizenöt", "Kilenc", "Húsz", "Hét"],
+         e: "Az alapelvek elfogadott vagy gyakorolt viselkedési és cselekvési szabályok; ezeket nyílttá tették."},
+        {q: "Sexton, Ridley és Kleiner (2004) szerint hol érvényesülnek az alapelvek a terápia során?",
+         o: ["A háttérben – a specifikus intervenciók és terápiás cselekvések pedig szem előtt", "Előtérben, minden intervenciót megelőzve", "Csak a szupervízióban", "Csak a lezáráskor"],
+         e: "Mivel gyakran kimondatlanok, a szakemberek nem biztos, hogy tudatában vannak."},
+        {q: "Melyik szerepel a tanácsadói kompetencia 15 alapelve között?",
+         o: ["A kompetencia fejleszthető a képzés során, de nem egyformasággal", "A kompetencia veleszületett és nem fejleszthető", "A kompetencia egyenlő a mikrokészségek összegével", "A rugalmasság veszélyezteti a kompetenciát"],
+         e: "14. alapelv. További példák: eredményorientáltság, szándékosság, rugalmasság, tudományos alap."},
+        {q: "A 9. alapelv szerint mit használnak a kompetens tanácsadók működésük irányítására?",
+         o: ["Mentális térképeket a terápiás változásról", "Kötött forgatókönyveket", "Kizárólag a kliens instrukcióit", "Szabványos kérdéslistákat"],
+         e: "„A kompetens tanácsadók mentális térképeket használnak a terápiás változásról.”"},
+        {q: "Mit mond a 10. alapelv a rugalmasságról?",
+         o: ["Lényeges része a kompetenciának; a tanácsadói kompetencia nem ismétlődő", "Kerülendő, mert kiszámíthatatlanná teszi a folyamatot", "Csak a kezdő tanácsadóknak szükséges", "Ellentétes a tudományossággal"],
+         e: "A tanácsadói kompetencia nem egy ismétlődő rutin."}
+      ]
+    },
+    {
+      cim: "EuroPsy",
+      kerdesek: [
+        {q: "Mit igazol a EuroPsy tanúsítvány?",
+         o: ["Hogy tulajdonosa a kívánt tudás és kompetencia birtokában van, és bizonyos szakmai tapasztalattal rendelkezik", "Hogy tulajdonosa pszichoterapeuta", "Hogy tulajdonosa működési engedéllyel bír", "Hogy tulajdonosa igazságügyi szakértő"],
+         e: "Az Európai Pszichológiai Társaságok Szövetsége (EFPA) célja az egységes európai pszichológiai tanúsítvány."},
+        {q: "Hány alapkompetenciát és hány munkaköri feladatot ír le a EuroPsy-rendszer?",
+         o: ["20 alapkompetenciát 6 munkaköri feladatnál", "15 alapkompetenciát 3 szinten", "9 alapkompetenciát 6 feladatnál", "20 alapkompetenciát 9 feladatnál"],
+         e: "A–F: célmeghatározás, helyzetfelmérés, fejlesztés, beavatkozás, értékelés, tájékoztatás."},
+        {q: "Melyik EuroPsy-feladatcsoportba tartozik a „szükségletek elemzése” és a „céladás”?",
+         o: ["A. Célmeghatározás", "B. Helyzetfelmérés", "D. Beavatkozás", "F. Tájékoztatás"],
+         e: "A szolgáltatás céljának meghatározása a klienssel együttműködve."},
+        {q: "Melyik EuroPsy-feladatcsoportba tartozik az egyének, csoportok, szervezetek és helyzetek felmérése?",
+         o: ["B. Helyzetfelmérés", "A. Célmeghatározás", "C. Fejlesztés", "E. Értékelés"],
+         e: "3–6. alapkompetencia."},
+        {q: "Melyik EuroPsy-feladatcsoportba tartozik a „közvetett beavatkozás”?",
+         o: ["D. Beavatkozás", "C. Fejlesztés", "E. Értékelés", "B. Helyzetfelmérés"],
+         e: "D: beavatkozás megtervezése, közvetlen személy- és helyzetorientált, közvetett beavatkozás, szolgáltatás bemutatása."},
+        {q: "Melyik EuroPsy-feladatcsoportba tartozik a „visszajelzés adása” és a „beszámoló írása”?",
+         o: ["F. Tájékoztatás", "E. Értékelés", "D. Beavatkozás", "A. Célmeghatározás"],
+         e: "Az ügyfél tájékoztatása a szükségleteinek és elvárásainak megfelelő módon."},
+        {q: "Melyik EuroPsy-feladatcsoport tartalmazza a szolgáltatás vagy termék tervezését, tesztelését és kiértékelését?",
+         o: ["C. Fejlesztés", "D. Beavatkozás", "E. Értékelés", "B. Helyzetfelmérés"],
+         e: "C: szolgáltatások fejlesztése pszichológiai elméletek és módszerek alapján (7–10.)."},
+        {q: "Mit jelentenek a metakompetenciák?",
+         o: ["A folyamat kontextusára, kereteire, szabályaira vonatkozó kompetenciák, amelyek a működtetés feltételeit biztosítják", "A legmagasabb szintű klinikai készségeket", "A mikrokészségek egy alcsoportját", "A kliens kompetenciáit"],
+         e: "9 metakompetencia; mindegyik szükséges a EuroPsy Diplomához."},
+        {q: "Hány metakompetenciát különít el a EuroPsy?",
+         o: ["Kilencet", "Hatot", "Tizenötöt", "Húszat"],
+         e: "Pl. szakmai stratégia, továbbképzés, szakmai kapcsolatok, ügyfélmenedzsment, minőségbiztosítás, szakmai tudatosság."},
+        {q: "Melyik metakompetencia jelenti annak felismerését, hogy szakmájában miben kell fejlődnie, mikor akadt el?",
+         o: ["Szakmai tudatosság", "Minőségbiztosítás", "Továbbképzés", "Szakmai stratégia"],
+         e: "9. metakompetencia."},
+        {q: "Melyik metakompetencia jelenti a kapcsolat létesítését és fenntartását (leendő) kliensekkel?",
+         o: ["Ügyfélmenedzsment", "Marketing és eladás", "Szakmai kapcsolatok", "Menedzsment"],
+         e: "A szakmai kapcsolatok metakompetencia a más szakmabeliekkel, szervezetekkel való kapcsolat."}
+      ]
+    }
+  ]
+});
+
+/* ---- 04-iranyzatok.js ---- */
+TANANYAG({
+  id: "pt04-iranyzatok",
+  cim: "Tanácsadás elméletei (irányzatok)",
+  targy: "Pszichológiai tanácsadás – elméleti összefoglaló",
+  forras: "Kissné Viszket Mónika, ELTE PPK (diasor)",
+  fajl: "Pszichológiai Tanácsadás irányzatok.pptx",
+  felveve: "2026-11-22",
+  temak: [
+    {
+      cim: "Pszichoanalitikus irányzat ma",
+      kerdesek: [
+        {q: "Gabbard és Westen (2003) szerint hogyan változott a pszichoanalitikus munka hangsúlya?",
+         o: ["Az időnk kisebb részében ásunk lefelé a múlt eltemetett relikviáiért", "Ma kizárólag a múlt rekonstrukciója a cél", "Teljesen elhagyták az áttétel elemzését", "Csak az álmokkal dolgoznak"],
+         e: "A múlt rekonstrukciója hasznos, de a hangsúly máshová került."},
+        {q: "Mi a terápia célja a mai pszichoanalitikus felfogásban?",
+         o: ["A strukturális változás", "A tünetek gyors megszüntetése", "A konfliktusok megoldása tanácsadással", "Az emlékezés helyreállítása önmagában"],
+         e: "A korai traumák strukturális elváltozásokat hoznak létre, ezek nem korrigálhatók pusztán az emlékezés helyreállításával."},
+        {q: "Mi az út a strukturális változáshoz a mai pszichoanalitikus felfogás szerint?",
+         o: ["Nem a konfliktusok megoldása, hanem a mentális érés elősegítése", "A konfliktusok gyors megoldása", "A viselkedés kondicionálása", "A kognitív torzítások azonosítása"],
+         e: "A mentális érés három összetevőn keresztül: belátás, tartalmazás, a terápiás kapcsolatban átélt újfajta tapasztalatok."},
+        {q: "Melyik a mentális érés három összetevője?",
+         o: ["Belátás, tartalmazás, terápiás kapcsolatban átélt újfajta tapasztalatok", "Empátia, elfogadás, hitelesség", "Szembesítés, tisztázás, értelmezés", "Monitorozás, figyelemelterelés, öninstrukció"],
+         e: "Ehhez kapcsolódnak a belátás, a kapcsolati paradigma (tartalmazás) és az interszubjektív megközelítés diái."},
+        {q: "Hogyan jelenik meg ma az elfojtott késztetés, affektus, tartalom, és hogyan értelmezik?",
+         o: ["Cselekvésben (áttétel, acting out, enactment) – nem ellenállásként, hanem az elemzés tárgyaként", "Kizárólag álmokban – szimbólumként", "Testi tünetként – orvosi problémaként", "Nem jelenik meg a terápiás kapcsolatban"],
+         e: "Ezek a terápiás kapcsolatban megjelenve az elemzés tárgyai."},
+        {q: "Mi igaz az értelmezésre mint hatótényezőre?",
+         o: ["Minél regresszívebb a beteg, annál inkább háttérbe szorul", "Minél regresszívebb a beteg, annál fontosabb", "Minden intervenció értelmezés, amelyet belátás követ", "Csak nonverbális lehet"],
+         e: "Regresszív betegnél helyette: tisztázás, szembesítés, visszatükrözés, figyelemfelhívás, figyelemirányítás, indirekt támogatás. A „minden intervenció, amelyet belátás követ” hibás definíció."},
+        {q: "Melyik értelmezésfajtát nevezi Gabbard „magas kockázatú” beavatkozásnak?",
+         o: ["Az áttételi értelmezést", "A tartalmi értelmezést", "A mély értelmezést", "Az elhárítások értelmezését"],
+         e: "Hatékonysága függ a mentalizációs kapacitástól – tudja-e „mintha kapcsolatként” kezelni a kliens."},
+        {q: "Melyik értelmezésfajtát fogadják általában nagy ellenállással, de nélkülözhetetlen?",
+         o: ["Az elhárítások értelmezését", "A tartalmi értelmezést", "A szimbólumelemzést", "Az affektív tükrözést"],
+         e: "Amivel a kliens megpróbálja elkerülni a kellemetlen konfliktusokkal való szembenézést."},
+        {q: "Mi a mély értelmezés?",
+         o: ["Ritka pillanatokban a terápiás történést korai infantilis konfliktusokkal, szorongásokkal, vágyakkal hozza összefüggésbe", "Az álmok szimbólumainak szótárszerű fordítása", "A kliens viselkedésének jutalmazása", "A terapeuta saját érzéseinek közlése"],
+         e: "Kapcsolati, megtartó szerepe is van."},
+        {q: "„Észrevettem, hogy miközben azt mondja, nyugodt, a keze enyhén remegni kezdett. Van ennek jelentősége az Ön számára?” Melyik verbális intervenció?",
+         o: ["Figyelemfelhívás", "Szembesítés", "Tisztázás", "Mély értelmezés"],
+         e: "A figyelemfelhívás egy észlelt jelenségre irányítja a kliens figyelmét."},
+        {q: "„Mit jelent számodra ez az emlék?” Melyik intervenció?",
+         o: ["Figyelemirányítás (narratív perspektívaváltás)", "Szembesítés", "Áttételi értelmezés", "Affektív tükrözés"],
+         e: "Figyelemirányítás – Berán, Unoka."},
+        {q: "„Mások kihasználnak” – „Nem mondok nemet.” Melyik intervenció összekapcsolása ez?",
+         o: ["Szembesítés", "Tisztázás", "Figyelemirányítás", "Ráhangolódás"],
+         e: "A szembesítés két, a kliens által elválasztott elemet állít egymás mellé."},
+        {q: "Mi az értelmezések hatékonyságának feltétele a kapcsolati paradigmában?",
+         o: ["A páciens megértettség-élménye", "A terapeuta tekintélye", "Az értelmezés gyakorisága", "A kliens intelligenciája"],
+         e: "A dolgok jelentésének megélése mindig kapcsolatokban szerzett tapasztalatokhoz kötődik; a setting is a kapcsolat része."},
+        {q: "Kinek a koncepciója a „tartalmazás”?",
+         o: ["Bion", "Bálint Mihály", "Kohut", "Ogden"],
+         e: "Bálint: elsődleges szeretet; Klein: tárgykapcsolat-elmélet; Bion: tartalmazás."},
+        {q: "Ki írta le az „analitikus harmadik” fogalmát („két lélek közös munkája”)?",
+         o: ["Ogden", "Stern", "Kohut", "Stolorow és Atwood"],
+         e: "Interszubjektív megközelítés."},
+        {q: "Kohut szerint mi az interszubjektivitás?",
+         o: ["Élményközösség – a másik társaságában átélt érzések szervezik az élményeket értelmes eseményekké", "A tudattalan tartalmak kivetítése", "Két személy közötti kognitív vita", "A terapeuta neutralitása"],
+         e: "„A tapasztalatok feldolgozásához egy másik elme visszhangjára szüntelenül szükségünk van” (Halász, 2006)."},
+        {q: "Melyik fogalom kapcsolódik Sternhez?",
+         o: ["Közös figyelmi fókusz; az érzések kölcsönös szabályozása határozza meg a szelfélményt", "Analitikus harmadik", "Elsődleges szeretet", "Konstruktív alternativizmus"],
+         e: "A gyermek affektusszabályozó kapacitása a környezet válaszaitól (ráhangolódás, reflektivitás) függ."},
+        {q: "Melyik szerepel a diasoron a tanácsadásban jól használható pszichoanalitikus irányzatok között?",
+         o: ["Individuálpszichológia, logoterápia, aktív analízis, jungi szimbólumterápia", "Klasszikus pszichoanalízis heti öt üléssel", "Racionális-emotív terápia", "Szisztematikus deszenzitizáció"],
+         e: "Ezek rövidebb, fókuszáltabb formák."}
+      ]
+    },
+    {
+      cim: "Személyközpontú tanácsadás",
+      kerdesek: [
+        {q: "Kinek a munkájára épül a diasor személyközpontú része?",
+         o: ["Mearns és Thorne", "Beck és Ellis", "Ivey és Zalaquett", "Hackney és Cormier"],
+         e: "Mearns–Thorne: Személyközpontú pszichoterápia és tanácsadás a gyakorlatban."},
+        {q: "Hogyan nevezik a humanisztikus irányzatot a pszichoanalízis és a behaviorizmus mellett?",
+         o: ["„Harmadik erő”", "„Második hullám”", "„Kognitív fordulat”", "„Új analízis”"],
+         e: ""},
+        {q: "Milyen fázisok követték egymást Rogers irányzatában?",
+         o: ["Nondirektív (40–50-es évek) → kliensközpontú (50–65) → személyközpontú (65-től, encounter)", "Kliensközpontú → nondirektív → integratív", "Személyközpontú → nondirektív → kliensközpontú", "Encounter → nondirektív → kognitív"],
+         e: "Nondirektív: „ne értelmezz!”; kliensközpontú: empátia, elfogadás, kongruencia; személyközpontú: találkozás."},
+        {q: "Melyik fázis jelszava a „ne értelmezz!”?",
+         o: ["Nondirektív (40–50-es évek)", "Kliensközpontú (50–65)", "Személyközpontú (65-től)", "Encounter-csoportok"],
+         e: ""},
+        {q: "Melyik párosítás helyes a humanisztikus emberkép forrásai közül?",
+         o: ["Goldstein – organizmikus elmélet", "Maslow – egzisztenciális lélektan", "May – önmegvalósítás", "Fromm – organizmikus elmélet"],
+         e: "Goldstein: organizmikus; Maslow: önmegvalósítás; Fromm: ember–társadalom; May: egzisztenciális lélektan."},
+        {q: "Mit jelent a „fejlődési hajlam” Mearns és Thorne szerint?",
+         o: ["Minden ember alapvetően pozitív, és belső képessége van a növekedésre, potenciálja megvalósítására", "Az ember fejlődését kizárólag a környezet határozza meg", "A fejlődés serdülőkorban lezárul", "A fejlődés a tudattalan konfliktusok megoldásától függ"],
+         e: "Támogató környezetben működik a szervezet értékelő folyamata is."},
+        {q: "Mi határozza meg a személyközpontú elmélet szerint, mennyire érezzük magunkat elégedettnek vagy szorongónak?",
+         o: ["Az én-kép és az ideális én közötti különbség", "A korai traumák száma", "A megerősítések gyakorisága", "Az automatikus gondolatok tartalma"],
+         e: "A belső értékelési központ és az én-kép szerepe."},
+        {q: "Mit jelent a „szervezet értékelő folyamata”?",
+         o: ["Támogató környezetben a képesség, hogy megbízzon saját gondolatában, érzésében, és ez alapján döntsön", "A test fiziológiai reakcióinak mérését", "Az intézményi minőségellenőrzést", "A külső értékelés átvételét"],
+         e: ""},
+        {q: "Mit jelent a „konfigurációk” fogalma?",
+         o: ["„Énen belül kialakult én”-ek – alternatív énrészek", "A család tagjainak térbeli elrendezése", "A sémák logikai hibái", "Az ülések időbeosztása"],
+         e: "Mearns–Thorne."},
+        {q: "Az empátia szintjei közül melyik a 3. szint?",
+         o: ["Hozzáadó empátia, a mélység tükrözése", "Pontos empátia", "Részleges megértés", "Nincs köze a kliens érzéseihez"],
+         e: "0: nincs köze; 1: részleges megértés; 2: pontos empátia; 3: hozzáadó empátia."},
+        {q: "Az empátia szintjei közül melyik a 2. szint?",
+         o: ["Pontos empátia", "Hozzáadó empátia", "Részleges megértés", "Szimpátia"],
+         e: ""},
+        {q: "Mi jellemzi az empátiát Mearns és Thorne szerint?",
+         o: ["Folyamat, az együttlét folyamata", "Egyszeri technika az ülés elején", "A kliens érzéseinek átvétele", "Tanácsadás érzelmi alapon"],
+         e: ""},
+        {q: "Mi a teendő a feltétel nélküli pozitív értékelés témájában, ha a tanácsadó nem tudja elfogadni a klienst?",
+         o: ["A kapcsolatra fókuszolás", "Azonnali továbbküldés", "A kliens viselkedésének büntetése", "Az elfogadás színlelése"],
+         e: "Kapcsolódó gondolatok: önsorsrontó kör, a kliens „saját nyelvei”, nehéz lehet elfogadni az elfogadást, az én feltételességem."},
+        {q: "Melyik fogalom kapcsolódik a hitelességhez (kongruencia) a diasoron?",
+         o: ["Rezonancia (ön-, empátiás, személyes rezonancia) és metakommunikáció", "Szókratészi kérdezés", "Kollaboratív empirizmus", "Tartalmazás"],
+         e: "Hitelesség – miért fontos (titokzatosság vs hatalom), rezonancia, metakommunikáció, hiteltelenség."}
+      ]
+    },
+    {
+      cim: "Kognitív megközelítés",
+      kerdesek: [
+        {q: "Kinek a nevéhez fűződik a percepciókutatás hipotézistesztelő modellje a kognitív előzmények között?",
+         o: ["Bruner", "Lazarus", "Rokeach", "Chomsky"],
+         e: "Schachter–Singer: attribúció; Lazarus: elsődleges–másodlagos kiértékelés; Chomsky: generatív nyelvtan; Piaget: asszimiláció, akkomodáció."},
+        {q: "Melyik párosítás helyes a kognitív irányzat előzményei közül?",
+         o: ["Lazarus – elsődleges és másodlagos kiértékelés", "Piaget – generatív nyelvtan", "Chomsky – attribúciókutatás", "Bruner – asszimiláció és akkomodáció"],
+         e: ""},
+        {q: "Mit mond a sémakutatás a sémák működéséről?",
+         o: ["Moduláris kapcsolatok – bármely rész aktivációja az egészet aktiválja; a legjobban illeszkedő séma irányítja a figyelmet", "A sémák csak tudatosan aktiválhatók", "A sémák felnőttkorban alakulnak ki", "A sémák nem befolyásolják a figyelmet"],
+         e: ""},
+        {q: "Mi George Kelly elméletének központi metaforája?",
+         o: ["Az ember tudós – hipotézist állít, ellenőriz, előrevetít", "Az ember gép – inger és válasz", "Az ember jéghegy – tudattalan erők", "Az ember színész – szerepek"],
+         e: "Célja, mint a tudósnak: anticipálni a viselkedést és terveket készíteni."},
+        {q: "Mi Kelly elméletének filozófiai előfeltevése?",
+         o: ["Konstruktív alternativizmus", "Dialektikus materializmus", "Logikai pozitivizmus", "Determinizmus"],
+         e: "Nincs objektív valóság vagy abszolút igazság – az események számos alternatív módon konstruálódhatnak."},
+        {q: "Mi igaz George Kellyre?",
+         o: ["Nem vallotta magát kognitívnak, mérnökként indult", "Racionális-emotív terápiát alkotott", "A depresszió kognitív modelljét dolgozta ki", "Pszichoanalitikusként dolgozott élete végéig"],
+         e: "Személyes konstrukciók elmélete; a viselkedés megismerésközpontú, átfogó elmélete."},
+        {q: "Miért fordult el Beck és Ellis (analitikus indíttatásúak) az analízistől?",
+         o: ["Rövid az idő, és a kliens nem érett az analízisre", "Mert az analízis tiltott lett", "Mert gyógyszeres kezelést akartak", "Mert csoportos módszert kerestek"],
+         e: ""},
+        {q: "Melyik jellemzés illik Albert Ellisre?",
+         o: ["Direktív, aktív – Racionális-emotív terápia (RET), „rajtad múlik”", "Vezető-támogató, kevésbé konfrontál, belátásra alapoz", "Nondirektív, „ne értelmezz!”", "Személyes konstrukciók elmélete"],
+         e: "Beck inkább vezető-támogató és nondirektívebb."},
+        {q: "Melyik jellemzés illik Aaron T. Beckre?",
+         o: ["Inkább vezető-támogató, kevésbé konfrontál, belátásra alapoz", "Direktív, aktív, erősen konfrontál", "„Ne értelmezz!”", "Kizárólag viselkedésterápiás technikákat használ"],
+         e: ""},
+        {q: "Melyek Beck kognitív terápiájának fő alkalmazási területei?",
+         o: ["Depresszió, szorongás, fóbia (közepesen súlyos)", "Vizsgadrukk, dühkitörés, dadogás", "Házassági és szexuális tanácsadás", "Pszichózis"],
+         e: "Ellis: helyzeti problémák (vizsgadrukk, dühkitörés, dadogás), házassági, szexuális tanácsadás."},
+        {q: "Melyek Ellis RET-jének jellemző alkalmazási területei?",
+         o: ["Helyzeti problémák (vizsgadrukk, dühkitörés, dadogás), házassági és szexuális tanácsadás", "Súlyos depresszió és pszichózis", "Gyermekkori autizmus", "Demencia"],
+         e: ""},
+        {q: "Mi a diasor iránymutatása, ha a kognitív kezelés nem hoz eredményt?",
+         o: ["Ha 3 hónapig nincs eredmény – más kell", "Ha 1 évig nincs eredmény – hosszabbítani kell", "Az eredménytelenség nem számít", "Ha 3 ülés után nincs eredmény – le kell zárni"],
+         e: ""},
+        {q: "Beck szerint milyen a kapcsolat érzelem és gondolkodás között?",
+         o: ["Egymással oki kapcsolatban vannak; a kogníció és a viselkedés összefügg", "Teljesen függetlenek", "Az érzelem mindig megelőzi a gondolkodást és nem befolyásolható", "Csak a viselkedés számít"],
+         e: "Információfeldolgozási paradigma: az észlelés aktív folyamat."},
+        {q: "Beck modelljében mi következik az alaphiedelemből (pl. „Mindig kudarcot vallok”)?",
+         o: ["Köztes hiedelem – diszfunkcionális attitűd (pl. „Ha nem értek valamit tökéletesen, akkor hülye vagyok”)", "Közvetlenül a korai életesemény", "Kizárólag testi tünetek", "A sémák megszűnése"],
+         e: "Korai életesemény → alaphiedelem → köztes hiedelem (DA) → jelen életesemény → spontán negatív gondolatok → tünetek."},
+        {q: "Mikor és hogyan alakulnak ki az alapsémák?",
+         o: ["Gyermekkorban, a gyermek számára fontos személyekkel való interakció talaján", "Felnőttkorban, munkahelyi stressz hatására", "Születéskor, genetikailag", "Kizárólag traumák hatására serdülőkorban"],
+         e: "Tartós, stabil mintát képeznek; maladaptív esetben logikai hibákon át NAG-okat aktiválnak."},
+        {q: "Mi a különbség a diszfunkcionális attitűdök (DA) és a sémák között?",
+         o: ["A DA-k konkrét helyzetekre vonatkoznak, a sémák fő viszonyulásainkat határozzák meg", "A DA-k veleszületettek, a sémák tanultak", "A DA-k tudattalanok, a sémák tudatosak", "Nincs különbség"],
+         e: "A DA-k globális szabályok, értékítéletek, önfenntartó túlzó állítások; tanulással sajátítjuk el."},
+        {q: "„Másoknak meg kellene érteniük az érzéseimet anélkül, hogy elmondanám nekik.” Melyik diszfunkcionális attitűd?",
+         o: ["Jogos elvárások", "Szeretettség igénye", "Omnipotencia", "Külső elismerés igénye"],
+         e: "Következmény: csalódás, frusztráció, kapcsolati konfliktusok."},
+        {q: "„Ha nem én irányítom a dolgokat, biztosan rosszul fognak alakulni.” Melyik diszfunkcionális attitűd?",
+         o: ["Omnipotencia", "Perfekcionizmus", "Teljesítményigény", "Jogos elvárások"],
+         e: "Következmény: kimerültség, szorongás, kapcsolati problémák."},
+        {q: "„Ha egyetlen hibát is vétek, az azt jelenti, hogy kudarcot vallottam.” Melyik diszfunkcionális attitűd?",
+         o: ["Perfekcionizmus", "Teljesítményigény", "Külső elismerés igénye", "Külső kontroll–autonómia"],
+         e: "Következmény: kényszeresség, stressz, halogatás."},
+        {q: "„Ha nem dicsérnek meg a munkámért, az azt jelenti, hogy nem vagyok elég jó.” Melyik diszfunkcionális attitűd?",
+         o: ["Külső elismerés igénye", "Szeretettség igénye", "Perfekcionizmus", "Omnipotencia"],
+         e: "Az egyén boldogsága mások reakcióitól függ."},
+        {q: "„Minden, ami rosszul történik az életemben, mások hibája.” Melyik diszfunkcionális attitűd?",
+         o: ["Külső kontroll–autonómia", "Jogos elvárások", "Omnipotencia", "Szeretettség igénye"],
+         e: "Áldozatszerep vagy túlzott felelősségérzet."},
+        {q: "Melyik NEM jellemzője az automatikus gondolatoknak?",
+         o: ["Tudatos, szándékos mérlegelés eredményei", "Akaratlanok, önkéntelenül futnak át a fejünkön", "Plauzibilisek, magától értetődőnek tűnnek", "Szavakat, képeket, képzeteket is tartalmazhatnak"],
+         e: "Témájukban ismétlődőek, közvetlenül kapcsolódnak az emocionális válaszhoz."},
+        {q: "„Bár jól elvégeztem a munkát, úgy érzem, hogy kudarcot vallottam.” Melyik logikai hiba?",
+         o: ["Érzelmi érvelés", "Mentális szűrő", "Pozitívum figyelmen kívül hagyása", "Katasztrofizálás"],
+         e: ""},
+        {q: "„Azt gondolja, hogy balfácán vagyok.” Melyik logikai hiba?",
+         o: ["Gondolatolvasás", "Címkézés", "Megszemélyesítés", "Túláltalánosítás"],
+         e: "A „balfácán vagyok” önmagában címkézés lenne."},
+        {q: "„Mivel van egy 2-esem, rossz munkát végeztem.” Melyik logikai hiba?",
+         o: ["Mentális szűrő", "Csőlátás", "Minden vagy semmi gondolkodás", "Érzelmi érvelés"],
+         e: ""},
+        {q: "„Ha jól csinálok valamit, az azért van, mert szerencsém volt.” Melyik logikai hiba?",
+         o: ["Pozitívum figyelmen kívül hagyása", "Nagyítás/kicsinyítés", "Gondolatolvasás", "Megszemélyesítés"],
+         e: ""},
+        {q: "„A tanár semmit sem csinál jól, nagyon kritikus és gyengén tanít.” Melyik logikai hiba?",
+         o: ["Csőlátás", "Mentális szűrő", "Címkézés", "Kell-állítás"],
+         e: ""},
+        {q: "„A jó jegyek nem bizonyítják, hogy okos vagyok.” Melyik logikai hiba?",
+         o: ["Nagyítás/kicsinyítés", "Katasztrofizálás", "Túláltalánosítás", "Érzelmi érvelés"],
+         e: ""},
+        {q: "Melyik a KVT módszertanának eleme, amely a terapeuta és kliens szimmetrikus kapcsolatára épül?",
+         o: ["Kollaboratív empirizmus", "Szabad asszociáció", "Áttételi neurózis kialakítása", "Ingerelárasztás"],
+         e: "További elemek: szókratészi kérdezés, irányított önfeltárás, ülés menetének megbeszélése, szocializálás, gondolatnapló."},
+        {q: "Melyik kognitív módszer szerepel a KVT módszertanában?",
+         o: ["Gondolatnapló, kognitív átstrukturálás", "Álomelemzés", "Szabad asszociáció", "Szimbólumdráma"],
+         e: ""}
+      ]
+    },
+    {
+      cim: "Viselkedésterápia",
+      kerdesek: [
+        {q: "Mi a viselkedésterápia fő kérdése?",
+         o: ["„Mit csinál” a beteg?", "„Mit érez” a beteg?", "„Mit gondol” a beteg?", "„Mit álmodik” a beteg?"],
+         e: "Tanuláselméleti alapokon nyugszik, tudományosan ellenőrizhető tényekre épül."},
+        {q: "Ki indította a behaviorista forradalmat 1913-ban (S–R tanulás)?",
+         o: ["J. B. Watson", "B. F. Skinner", "I. P. Pavlov", "E. L. Thorndike"],
+         e: "Klasszikus behaviorizmus: csak az S és az R a lényeg."},
+        {q: "Kihez köthető az empirizmus és a „tabula rasa”?",
+         o: ["John Locke", "Wundt", "Ebbinghaus", "Tolman"],
+         e: "Minden tudás érzékszervi tapasztalatokból fakad."},
+        {q: "Mit jelent a K és a C a tanulás R = f(S, O, K, C) képletében?",
+         o: ["K: környezeti megerősítés (kontingenciák); C: környezeti következmények (konzekvenciák)", "K: kogníció; C: kondicionálás", "K: kontroll; C: kultúra", "K: konfliktus; C: coping"],
+         e: "R: reakció; S: ingerkörnyezet; O: személyiség."},
+        {q: "Melyik NEM tartozik a tanulás alaptípusai közé a diasoron?",
+         o: ["Belátásos tanulás", "Habituáció/szenzitizáció", "Operáns kondicionálás", "Modelltanulás"],
+         e: "Négy típus: habituáció/szenzitizáció, klasszikus, operáns kondicionálás, modelltanulás."},
+        {q: "„Hevesebben reagálunk egy készülék zajára, ha azt gyakran az elromlása követi.” Mi ez?",
+         o: ["Szenzitizáció", "Habituáció", "Generalizáció", "Kioltódás"],
+         e: "Gyenge inger → fenyegető inger → felerősített reakció."},
+        {q: "„A falióra ketyegésére nem figyelünk.” Mi ez?",
+         o: ["Habituáció", "Szenzitizáció", "Diszkrimináció", "Negatív megerősítés"],
+         e: "Az ingerelárasztás egyik eleme."},
+        {q: "Mi a kioltódás a klasszikus kondicionálásban?",
+         o: ["Ha a feltételes inger a feltétel nélküli inger nélkül jelenik meg, a feltételes reakció gyengül, majd megszűnik", "Ha egy hasonló inger ugyanazt a választ váltja ki", "Ha a büntetés csökkenti a viselkedést", "Ha két inger összekapcsolódik"],
+         e: "A szorongásos reakció gyakran rezisztens a kioltásra."},
+        {q: "„Megharap a szomszéd kutyája, és később minden kutyától félni kezd.” Melyik jelenség?",
+         o: ["Generalizáció", "Diszkrimináció", "Habituáció", "Kioltódás"],
+         e: "Ingergeneralizáció – pl. a fóbia kiterjedése."},
+        {q: "Mi a diszkrimináció a kondicionálásban?",
+         o: ["A generalizáció ellentéte – különbségtétel a hasonló ingerek között", "A hátrányos megkülönböztetés", "A feltételes reakció megszűnése", "A büntetés egy formája"],
+         e: "A nevelés szerepe jelentős."},
+        {q: "Melyik törvényre épülnek Skinner operáns kondicionálási elvei?",
+         o: ["Thorndike effektus törvényére", "Pavlov reflextanára", "Watson S–R modelljére", "Bandura szociális tanuláselméletére"],
+         e: "Ha egy viselkedés hatékony, jövőbeni megjelenése valószínű – a hatékonyságot a megerősítés jelenti."},
+        {q: "„Ha előbb tanul, utána játszhat” – a kellemesebb viselkedés a kevésbé kellemes után fokozza a kevésbé kellemes gyakoriságát. Melyik elv?",
+         o: ["Premack-elv", "Effektus törvénye", "Negatív megerősítés", "Telítés"],
+         e: ""},
+        {q: "Mi a negatív megerősítés?",
+         o: ["Averzív inger megszüntetése révén nő a viselkedés gyakorisága – NEM büntetés", "Averzív inger megjelenése a viselkedés után", "A jutalom elmaradása", "A viselkedés kioltása"],
+         e: "Pl. kényszeres kézmosás: azért mossa, hogy elkerülje a szorongást."},
+        {q: "Mi a negatív büntetés?",
+         o: ["A viselkedés után elmarad a megerősítés (jutalom), így a viselkedés gyakorisága csökken", "Averzív inger jelenik meg a viselkedés után", "Averzív inger megszűnik a viselkedés után", "A viselkedés jutalmazása"],
+         e: "Pozitív büntetés: averzív inger megjelenése."},
+        {q: "Mire alkalmas a büntetés a diasor szerint?",
+         o: ["Viselkedésmódok visszaszorítására, de nem viselkedésváltoztatásra", "Új viselkedés kialakítására", "A kioltás felgyorsítására", "A generalizáció erősítésére"],
+         e: ""},
+        {q: "Milyen megerősítés működik a modellkövetésben?",
+         o: ["Kognitív szintű, anticipált megerősítés – nincs közvetlen megerősítés", "Csak közvetlen, tárgyi jutalom", "Kizárólag büntetés", "Feltétel nélküli inger"],
+         e: "A domináns egyének viselkedését inkább utánozzuk."},
+        {q: "Melyik a viselkedésterápia módszere?",
+         o: ["Szisztematikus deszenzitizálás", "Álomfejtés", "Szabad asszociáció", "Áttételi értelmezés"],
+         e: "Továbbá: szerepjáték, operáns módszerek, ingerelárasztás, szorongásmenedzselés, önverbalizáció, expozíció."},
+        {q: "Hány ülésből áll jellemzően az asszertivitás tréning?",
+         o: ["6–12 ülés, heti rendszerességgel", "1–2 ülés", "20–30 ülés", "6–10 kétórás foglalkozás"],
+         e: "Elemei: pszichoedukáció, szerepjáték, modelltanulás, viselkedési kísérletek, kognitív változás."},
+        {q: "Mi az asszertivitás (Perczel és Tringer, 1994)?",
+         o: ["Önérvényesítő viselkedés: saját szempontok őszinte, szorongásmentes közlése a másik tiszteletben tartásával", "A másik fél akaratának elfogadása", "Agresszív érdekérvényesítés", "A konfliktusok elkerülése"],
+         e: "Én-közlésekkel, diplomatikus érveléssel; hiánya az önbecsülést csökkenti."},
+        {q: "Milyen formában és terjedelemben zajlik a problémamegoldó tréning?",
+         o: ["Egyéni vagy csoportos, 6–10 kétórás foglalkozás", "Csak egyéni, 1 alkalom", "Csak csoportos, 20 alkalom", "Online, önállóan"],
+         e: "D’Zurilla (1986): probléma és célok meghatározása → elemzés → lépések tervezése, végrehajtása → értékelés."},
+        {q: "Melyik csoportban jellemzően alacsony a problémamegoldás szintje?",
+         o: ["Depresszióban és szuicid cselekedetek esetén", "Kiemelten tehetségeseknél", "Sportolóknál", "Vezetőknél"],
+         e: ""}
+      ]
+    }
+  ]
+});
+
+/* ---- 05-jog.js ---- */
+TANANYAG({
+  id: "jog-alapismeretek",
+  cim: "Jogi alapismeretek",
+  targy: "Jogi alapismeretek",
+  forras: "Dr. Kovács Zsófi előadása, 2026. szeptember 8.",
+  fajl: "előadás-20260908.pptx",
+  felveve: "2026-11-22",
+  temak: [
+    {
+      cim: "Jogforrások, Ptk., cselekvőképesség",
+      kerdesek: [
+        {q: "Melyik a legmagasabb szintű jogforrás, és ki fogadja el?",
+         o: ["Az Alaptörvény – az Országgyűlés 2/3-os többséggel", "A Ptk. – a Kormány", "A sarkalatos törvény – a köztársasági elnök", "A kormányrendelet – az Országgyűlés egyszerű többséggel"],
+         e: "Az Alaptörvénnyel semelyik jogszabály nem lehet ellentétes."},
+        {q: "Milyen többség szükséges egy sarkalatos törvény elfogadásához?",
+         o: ["A szavazatok 2/3-a", "Egyszerű többség", "3/4-es többség", "Egyhangú döntés"],
+         e: "Az Alaptörvény által meghatározott, kiemelt tárgykörökben."},
+        {q: "Melyik alapelv szerepel a Jogalkotási törvényben (2010. évi CXXX.)?",
+         o: ["Nincs visszamenő hatály", "A jogszabály visszamenőleg is alkalmazható", "Felkészülési idő nem szükséges", "Hasonló életviszonyok eltérő szintű jogszabályban is rendezhetők"],
+         e: "Továbbá: megfelelő felkészülési idő, azonos életviszonyok azonos szintű jogszabályban."},
+        {q: "Mikor lép hatályba a jogszabály?",
+         o: ["A közlönyben való kihirdetéssel; időbeli hatálya a hatálybalépés napjától a hatályon kívül helyezésig tart", "Az elfogadás napján automatikusan", "A sajtóban való megjelenéskor", "Az első alkalmazásakor"],
+         e: "magyarkozlony.hu"},
+        {q: "Melyik minisztérium felel a jogszabályok előkészítéséért?",
+         o: ["Az Igazságügyi Minisztérium", "A Belügyminisztérium", "A Pénzügyminisztérium", "Az Oktatási Hivatal"],
+         e: "Az előkészítés része a hatásvizsgálat és a társadalmi egyeztetés."},
+        {q: "Miért van kitüntetett helye a Polgári törvénykönyvnek (2013. évi V. tv.)?",
+         o: ["Mert a polgári jogi viszonyokra vonatkozó jogszabályokat vele összhangban kell értelmezni – mögöttes jogszabály", "Mert magasabb szintű az Alaptörvénynél", "Mert csak a büntetőjogot szabályozza", "Mert sarkalatos törvény"],
+         e: "Ptk. 1:2. §."},
+        {q: "Hány könyvből áll a Ptk.?",
+         o: ["Nyolc", "Hat", "Tíz", "Négy"],
+         e: "1. bevezető, alapelvek; 2. személyek; 3. jogi személyek; 4. családjog; 5. dologi jog; 6. kötelmek; 7. öröklés; 8. értelmező rendelkezések."},
+        {q: "Melyik Ptk.-könyv a „Családjogi Kódex” (szülői felügyelet, gyámság, örökbefogadás)?",
+         o: ["A Negyedik könyv", "A Második könyv", "A Harmadik könyv", "A Hatodik könyv"],
+         e: "A Második könyv a személyek joga (jogképesség, cselekvőképesség, személyiségi jogok)."},
+        {q: "Mi a jogképesség?",
+         o: ["Jogok és kötelezettségek alanya lehet – minden ember jogképes", "A szerződéskötési képesség", "A belátási képesség megléte", "A nagykorúság"],
+         e: "A cselekvőképesség a köznyelvben a „szerződéskötési képesség”."},
+        {q: "Mi a következménye a cselekvőképességet korlátozó jognyilatkozatnak?",
+         o: ["Semmis", "Megtámadható", "Érvényes", "Gyámhatósági jóváhagyással érvényes"],
+         e: ""},
+        {q: "Ki cselekvőképtelen törvény erejénél fogva?",
+         o: ["A 14 év alatti kiskorú", "A 14–18 év közötti kiskorú", "A 18 év alatti minden személy", "A 16 év alatti kiskorú"],
+         e: "Cselekvőképtelen még, akinek belátási képessége (átmenetileg) hiányzik, illetve akinek cselekvőképességét bíróság kizárta."},
+        {q: "Ki korlátozottan cselekvőképes?",
+         o: ["A 14–18 év közötti kiskorú, és akinek bíróság korlátozta a cselekvőképességét", "Minden 18 év alatti", "Csak a gondnokság alatt álló nagykorú", "A 12–16 év közötti kiskorú"],
+         e: "Jognyilatkozatához általában a törvényes képviselő hozzájárulása kell (kivétel pl. a mindennapi élet szokásos szerződései)."},
+        {q: "Mi igaz a semmisségre való hivatkozásra cselekvőképtelen / korlátozottan cselekvőképes személy jognyilatkozatánál?",
+         o: ["Csak az ő érdekében lehet rá hivatkozni", "Bárki hivatkozhat rá, bárki érdekében", "Csak a szerződő partner hivatkozhat rá", "Csak a bíróság hivatkozhat rá"],
+         e: ""},
+        {q: "Mekkora az értékhatár, amely feletti vagyontárgyról való rendelkezéshez a kiskorú törvényes képviselőjének gyámhatósági jóváhagyás kell?",
+         o: ["A szociális vetítési alap 60-szorosa (28 500 × 60 = 1 710 000 Ft)", "500 000 Ft", "A minimálbér tízszerese", "5 000 000 Ft"],
+         e: "Egyéb esetek: tartásról lemondás, öröklés visszautasítása, ingatlan átruházása stb."},
+        {q: "Mikor korlátozhatja a bíróság a nagykorú cselekvőképességét?",
+         o: ["Mentális zavarból fakadó, tartós vagy visszatérő, nagymértékű belátási korlátozottság esetén, ha a jogvédelem más módon nem biztosítható", "Bármely pszichiátriai diagnózis esetén", "A család kérésére indoklás nélkül", "Ha a személy 70 év feletti"],
+         e: "Ilyenkor a bíróság gondnokot rendel."},
+        {q: "Legfeljebb mennyi idő után kell felülvizsgálni a gondnokság alá helyezést?",
+         o: ["Korlátozásnál legfeljebb 5, kizárásnál legfeljebb 10 év", "Mindkét esetben 1 év", "Korlátozásnál 10, kizárásnál 5 év", "Nem kell felülvizsgálni"],
+         e: "A felülvizsgálatot a gyámhatóság kezdeményezi hivatalból."},
+        {q: "Mi igaz a támogatott döntéshozatalra?",
+         o: ["Nem érinti a cselekvőképességet; a gyámhatóság rendel ki támogatót", "A bíróság kizárja vele a cselekvőképességet", "A támogató a támogatott helyett nyilatkozik", "Csak kiskorúaknál alkalmazható"],
+         e: "Kisebb mértékű belátási hiány esetén; 5 évente vagy kérelemre felülvizsgálják."},
+        {q: "Mi az előzetes jognyilatkozat?",
+         o: ["A nagykorú cselekvőképessége esetleges elvesztésére tett nyilatkozata a gyámhatóság előtt (pl. választott gondnok személyéről)", "A kiskorú nyilatkozata a szülő helyett", "Végrendelet", "A gondnok éves beszámolója"],
+         e: "Az OBH tartja nyilván; a gondnokság alá helyezési eljárásban a bíróság hatályosítja."},
+        {q: "Milyen jog a személyiségi jog?",
+         o: ["Abszolút jog – mindenki köteles tiszteletben tartani", "Relatív jog – csak a szerződő felek között", "Csak közszereplőket megillető jog", "Átruházható vagyoni jog"],
+         e: "Megsértése esetén sérelemdíj követelhető."},
+        {q: "Melyik a Ptk. által nevesített személyiségi jog?",
+         o: ["A képmáshoz és a hangfelvételhez való jog", "A kedvező munkabérhez való jog", "Az ingyenes oktatáshoz való jog", "A választójog"],
+         e: "Továbbá: élet, testi épség, egészség; személyes szabadság, magánélet, magánlakás; becsület, jóhírnév; magántitok, személyes adatok; névviselés; egyenlő bánásmód."},
+        {q: "Hol szabályozzák ma az üzleti titkot és a védett ismeretet (know-how)?",
+         o: ["Önálló törvényben (2018. évi LIV. tv.)", "A Ptk. személyiségi jogai között", "A Munka törvénykönyvében", "Az Alaptörvényben"],
+         e: "Korábban a személyiségi jogok között volt."},
+        {q: "Mi tartozik a szülői felügyelet tartalmába?",
+         o: ["Név meghatározása, gondozás, nevelés, tartózkodási hely megválasztása, vagyonkezelés, törvényes képviselet", "Csak a gondozás és a nevelés", "Csak a vagyonkezelés és a törvényes képviselet", "A gyermek büntetőjogi felelősségének átvállalása"],
+         e: "A szülői felügyelet jog és kötelezettség is; a gyermek testi-lelki fejlődése érdekében kell gyakorolni."},
+        {q: "Mi történik, ha érdekellentét áll fenn a gyermek és a szülő között?",
+         o: ["A szülő nem képviselheti a gyereket; a gyámhatóság eseti gyámot rendel", "A bíróság megszünteti a szülői felügyeletet", "A gyermek maga képviseli magát", "A másik szülő automatikusan kizárólagos jogot kap"],
+         e: ""},
+        {q: "Melyik kérdésben döntenek együtt a szülők akkor is, ha csak az egyikük gyakorolja a szülői felügyeletet?",
+         o: ["A gyermek iskolája, lakóhelye, neve, állampolgársága, külföldi tartózkodása, életpályája", "A napi étkezés", "A zsebpénz összege", "A hétvégi programok"],
+         e: "Kivéve, ha e jogát a bíróság kizárta."},
+        {q: "Mikor szünetel a szülői felügyeleti jog?",
+         o: ["A szülő cselekvőképtelensége ideje alatt", "Amíg a szülő külföldön dolgozik", "A válóper alatt", "Ha a szülő újraházasodik"],
+         e: "Megszűnik a gyermek nagykorúvá válásával vagy bírósági határozattal."}
+      ]
+    },
+    {
+      cim: "Képzés és egészségügyi tevékenység",
+      kerdesek: [
+        {q: "Melyik törvény a Felsőoktatási törvény?",
+         o: ["2011. évi CCIV. törvény", "2011. évi CXC. törvény", "2013. évi LXXVII. törvény", "1997. évi CLIV. törvény"],
+         e: "A CXC. a köznevelési, a LXXVII. a felnőttképzési, a CLIV. az egészségügyi törvény."},
+        {q: "Ki vezet nyilvántartást a kiadott felsőoktatási oklevelekről?",
+         o: ["Az Oktatási Hivatal", "Az OKFŐ", "A felsőoktatási intézmény rektora", "A NAV"],
+         e: "Oktatási Nyilvántartás Hallgatói Törzse."},
+        {q: "Mit mond ki a 2019. évi CXI. törvény („kuruzslási törvény”)?",
+         o: ["Az oklevéllel együtt adható címet csak felsőoktatási intézmény adományozhat, és csak az használhatja, aki az oklevelet megszerezte", "Tiltja a pszichológiai magánpraxist", "Kötelezővé teszi az EESZT-csatlakozást", "Szabályozza a minimálbért"],
+         e: "Jogosulatlan címadományozás vétség, üzletszerűen bűncselekmény; jogosulatlan használat szabálysértés."},
+        {q: "Melyik rendelet szerint szervezhető szakirányú továbbképzés?",
+         o: ["87/2015 kormányrendelet", "22/2012 EMMI rendelet", "162/2015 kormányrendelet", "64/2011 NEFMI rendelet"],
+         e: "Az intézménynek rendelkeznie kell olyan szakkal, amelyhez a továbbképzés igazodik; BA/MA után lehet részt venni."},
+        {q: "Ki veszi nyilvántartásba a saját tanterv alapján szervezett szakirányú továbbképzést?",
+         o: ["Az Oktatási Hivatal", "Az OKFŐ", "A Magyar Pszichológiai Társaság", "Az Igazságügyi Minisztérium"],
+         e: ""},
+        {q: "Melyik két alappillér határozza meg a felnőttképzési tevékenységet a Felnőttképzési törvény (2013. évi LXXVII.) szerint?",
+         o: ["Szervezett és célirányos", "Ingyenes és nyilvános", "Akkreditált és állami", "Gyakorlati és elméleti"],
+         e: "Szervezett, célirányos kompetenciakialakításra és -fejlesztésre irányuló oktatás."},
+        {q: "Mi különbözteti meg a felnőttképzési engedélyt a bejelentéstől?",
+         o: ["A bejelentés adminisztratív aktus, nem kell jóváhagyás; engedély kell pl. a költségvetésből vagy uniós forrásból támogatott képzésekhez", "A bejelentéshez minőségbiztosítási rendszer és szakértői jóváhagyás kell", "Az engedély csak magánszemélyeknek szól", "Nincs különbség"],
+         e: "2027-től az MKIK az engedélyező és ellenőrző hatóság."},
+        {q: "Melyik rendelet szabályozza az egészségügyi felsőfokú szakirányú szakképesítéseket (szakpszichológusi szakképesítések)?",
+         o: ["22/2012 EMMI rendelet", "87/2015 kormányrendelet", "96/2003 kormányrendelet", "15/2013 EMMI rendelet"],
+         e: ""},
+        {q: "Melyik NEM alap-szakképesítés a 22/2012 EMMI rendelet szerint?",
+         o: ["Pszichoterápia", "Felnőtt klinikai és mentálhigiénés szakpszichológia", "Neuropszichológiai szakpszichológia", "Alkalmazott egészségpszichológiai szakpszichológia"],
+         e: "A pszichoterápia és a klinikai addiktológiai szakpszichológia ráépített szakképesítés."},
+        {q: "Melyik a jelenleg legfontosabb „tevékenységi jogforrás” a módszerspecifikus képzések témájában?",
+         o: ["A Szakpszichológia Irányelv (Egészségügyi Közlöny, módosítva 2023.04.18.)", "A Felsőoktatási törvény", "A Ptk.", "A Kjt."],
+         e: "A módszerspecifikus képzésekre nincs jogszabályi rendelkezés, a szakma szabályai szerint működnek."},
+        {q: "Ki fogadja be a módszert a módszerspecifikus képzések rendszerében?",
+         o: ["A Pszichoterápiás Tanács", "Az Oktatási Hivatal", "Az OKFŐ", "A Pedagógus Kar"],
+         e: "Egyesületi formában, a Pszichoterápiás Tanácshoz csatlakozva lehet képzést folytatni."},
+        {q: "Melyik rendelet szabályozza az egészségügyi szakképzés rendszerét?",
+         o: ["162/2015 kormányrendelet", "22/2012 EMMI rendelet", "60/2003 ESzCsM rendelet", "385/2016 kormányrendelet"],
+         e: "Együtt az orvosi, gyógyszerészi szakképzéssel; támogatott vagy költségtérítéses lehet."},
+        {q: "Milyen feltételekkel lehet valaki tutor az egészségügyi szakképzésben?",
+         o: ["A képzőhelynél alkalmazott, megfelelő szakvizsgával és legalább 3 év tapasztalattal rendelkező szakpszichológus", "Bármely pszichológus diploma után", "Csak egyetemi tanár", "Legalább 10 év tapasztalattal rendelkező orvos"],
+         e: "Támogatott képzésben az OKFŐ tutori névjegyzékébe is fel kell venni."},
+        {q: "Ki akkreditálja a képzőhelyet az egészségügyi szakképzésben?",
+         o: ["Az OKFŐ", "Az Oktatási Hivatal", "Az MPT", "A NAV"],
+         e: "Feltétel: betegforgalom, minőségbiztosítás, a vezető tapasztalata, szakképesítése."},
+        {q: "Melyik törvény szabályozza a külföldi diplomák elismerését?",
+         o: ["2001. évi C. törvény", "2011. évi CCIV. törvény", "2016. évi XXIX. törvény", "2009. évi CXV. törvény"],
+         e: "Az Oktatási Hivatal Magyar Ekvivalencia és Információs Központjától lehet kérni."},
+        {q: "Melyik törvényben található az egyetlen klinikai szakpszichológia–pszichoterápia fogalom (103. §)?",
+         o: ["Az Egészségügyi törvényben (1997. évi CLIV.)", "A Ptk.-ban", "A Köznevelési törvényben", "A Felnőttképzési törvényben"],
+         e: ""},
+        {q: "Mikor kerül be a pszichológus az egészségügyi működési nyilvántartásba?",
+         o: ["A szakvizsga megszerzésével, kérelemre (OKFŐ vezeti)", "Automatikusan a diploma átvételekor", "Az első munkaszerződéssel", "Az MPT-tagsággal"],
+         e: "Önállóan egészségügyi tevékenységet csak az végezhet, aki szerepel a működési nyilvántartásban."},
+        {q: "Milyen gyakran kell megújítani a működési nyilvántartást?",
+         o: ["5 évente, a kötelező továbbképzések teljesítésével", "Évente", "10 évente", "Soha"],
+         e: "Továbbképzési rendelet: 64/2011 NEFMI."},
+        {q: "Melyik a kötelező továbbképzés három fajtája?",
+         o: ["Kötelező szintentartó, szabadon választható elméleti, gyakorlati", "Alap, közép, emelt", "Egyéni, csoportos, online", "Elméleti, módszerspecifikus, szupervíziós"],
+         e: "A szintentartó továbbképzést egyetemek és országos szakmai intézmények szervezik."},
+        {q: "Mi a gyakorlati továbbképzés feltétele?",
+         o: ["Legalább 3 év, megfelelő szakterületen végzett tevékenység igazolása (ennek hiányában 1–3 hónap szupervízió alatti munka)", "Egy szakmai konferencián való részvétel", "Legalább 1 év bármilyen munkaviszony", "Egy publikáció"],
+         e: ""},
+        {q: "Ki kérheti a működési engedélyt?",
+         o: ["Az egészségügyi szolgáltató (a működési nyilvántartás viszont személyhez kapcsolódik)", "Minden pszichológus személyesen", "Az OKFŐ", "A beteg"],
+         e: "96/2003 kormányrendelet; szakmánként külön engedély; felelősségbiztosítás az előfeltétel."},
+        {q: "Melyik jogszabály tartalmazza a pszichológiai tevékenység egyetlen részletesebb jogforrási leírását (pl. hipnózis, módszerspecifikus képzések)?",
+         o: ["A Minimumfeltétel-rendelet (60/2003 ESzCsM)", "A Szakmakód-rendelet (2/2004 EüM)", "A Működési engedély rendelet (96/2003)", "Az Infotörvény"],
+         e: ""},
+        {q: "Mióta kötelező minden orvosi szakmának az EESZT-csatlakozás?",
+         o: ["2021. január 31-től", "2017-től", "2025-től", "Nem kötelező"],
+         e: "Pszichológusoknak később válhat kötelezővé."},
+        {q: "Melyik törvény szabályozza az egészségügyi és kapcsolódó személyes adatok kezelését?",
+         o: ["1997. évi XLVII. törvény", "2011. évi CXII. törvény", "1997. évi XXXI. törvény", "2018. évi LIV. törvény"],
+         e: "Az egészségügyi adat különösen érzékeny adat; az EESZT szabályai is itt vannak."}
+      ]
+    },
+    {
+      cim: "Köznevelés, szakértés, kutatás",
+      kerdesek: [
+        {q: "Melyik törvény tartalmazza a pedagógusok új életpályájának szabályait?",
+         o: ["2023. évi LII. törvény (Pétv.)", "2011. évi CXC. törvény", "1992. évi XXXIII. törvény", "2020. évi C. törvény"],
+         e: "Végrehajtási rendelete: 401/2023 kormányrendelet."},
+        {q: "Milyen munkakörben alkalmazzák az óvoda- és iskolapszichológust?",
+         o: ["Pedagógus munkakörben", "Egészségügyi szolgálati jogviszonyban", "Megbízási szerződéssel", "Köztisztviselőként"],
+         e: ""},
+        {q: "Melyik fokozatba lehet legfeljebb besorolni a nevelő-oktató munkát közvetlenül segítő, pedagógus szakképzettségű szakembert?",
+         o: ["Pedagógus II.", "Mesterpedagógus", "Kutatótanár", "Gyakornok"],
+         e: "Fokozatok: gyakornok, Ped. I., Ped. II., mesterpedagógus, kutatótanár."},
+        {q: "Mennyi próbaidőt kell kikötni a köznevelési foglalkoztatotti jogviszonyban?",
+         o: ["3 hónapot", "1 hónapot", "6 hónapot", "Nem kell próbaidő"],
+         e: "A jogviszony pályázat útján jön létre."},
+        {q: "Mivel egyenértékű a Pétv. Vhr. szerint a tanácsadó szakpszichológus szakképesítés?",
+         o: ["A pedagógus-szakvizsgával", "A pszichoterapeuta szakvizsgával", "A doktori fokozattal", "A mesterpedagógusi fokozattal"],
+         e: "Ugyanígy a klinikai és a neuropszichológus szakképesítés."},
+        {q: "Hány gyermekenként kell legalább 50%-os munkaidőben óvoda-/iskolapszichológust foglalkoztatni?",
+         o: ["500 gyermekenként", "100 gyermekenként", "1000 gyermekenként", "250 gyermekenként"],
+         e: ""},
+        {q: "Mennyi szakmai gyakorlat kell ahhoz, hogy gyakornokból Pedagógus I. fokozatba lépjen valaki?",
+         o: ["Legalább 2 év (osztatlan képzés után 1 év)", "Legalább 5 év", "Legalább 6 hónap", "Legalább 10 év"],
+         e: "Megfelelő végzettség mellett."},
+        {q: "Mi történik, ha a gyakornok másodszor sem teljesíti a minősítő vizsgát?",
+         o: ["A köznevelési foglalkoztatotti jogviszonyát meg kell szüntetni", "Automatikusan Ped. I.-be lép", "Harmadszor is próbálkozhat korlátlanul", "Óraadóvá minősül át"],
+         e: ""},
+        {q: "Meddig vehető fel pszichológus (szakpszichológusi végzettség nélkül) óvoda-/iskolapszichológusnak, ha a munkakör nem tölthető be?",
+         o: ["5 év határozott időre, ha vállalja a szakpszichológus szakképzettség megszerzését", "Határozatlan időre", "1 évre", "Nem vehető fel"],
+         e: ""},
+        {q: "Mi a Pedagógus Kar?",
+         o: ["A pedagógusok önkormányzattal rendelkező szakmai szervezete („kamarája”), a kinevezéssel automatikusan tagjává válnak", "Önkéntes egyesület", "A minisztérium egyik főosztálya", "Szakszervezet"],
+         e: "Ő dolgozza ki az Etikai Kódexet; törvényességi felügyeletét a köznevelésért felelős miniszter látja el."},
+        {q: "Melyik rendelet szerint biztosít a pedagógiai szakszolgálat koordinátora havi szakmai konzultációt az óvoda-/iskolapszichológusoknak?",
+         o: ["15/2013 EMMI rendelet", "20/2012 EMMI rendelet", "22/2012 EMMI rendelet", "401/2023 kormányrendelet"],
+         e: "A 20/2012 EMMI rendelet az oktatási intézmények működéséről szól."},
+        {q: "Mi igaz a szülőre a nevelési tanácsadás vagy iskolapszichológusi vizsgálat kapcsán?",
+         o: ["Nemcsak joga, hanem kötelezettsége is megjelenni gyermekével, ha a pedagógusok szükségesnek tartják", "Csak joga van, kötelezettsége nincs", "A szülő nem lehet jelen", "Csak bírósági végzésre köteles"],
+         e: "Szakértői vizsgálaton való részvételre kötelezhető."},
+        {q: "Melyik törvény rögzíti a gyermekjóléti szolgálat felé fennálló jelzési kötelezettséget?",
+         o: ["A Gyermekvédelmi törvény (1997. évi XXXI.)", "A Ptk.", "Az Infotörvény", "A Pétv."],
+         e: "A jelzés elmulasztása büntetőjogi felelősségre vonást vonhat maga után; a jelzőt zártan kezelik."},
+        {q: "Melyik törvény vonatkozik elsősorban az igazságügyi szakértőkre?",
+         o: ["2016. évi XXIX. törvény", "2001. évi C. törvény", "2016. évi CXXX. törvény", "1997. évi CLIV. törvény"],
+         e: "Szakértői tevékenységet az végezhet, aki az IM névjegyzékében szerepel."},
+        {q: "Mióta önálló igazságügyi szakértői szakterület a tanácsadó szakpszichológia?",
+         o: ["2014. március 15-től", "2018. január 1-től", "1993-tól", "2023-tól"],
+         e: "A névjegyzékbe vételhez képzettség és 2 év gyakorlati idő kell."},
+        {q: "Miben NEM alkothat véleményt az igazságügyi szakértő?",
+         o: ["Jogkérdésben", "Személyek vizsgálata alapján", "A kirendelésben megjelölt szakkérdésben", "Tárgyak vizsgálata alapján"],
+         e: "A szakértői vélemény csak vizsgálaton alapulhat."},
+        {q: "Melyik gyámhatósági eljárásban kérnek a gyakorlatban a leggyakrabban pszichológus szakértői véleményt?",
+         o: ["A szülői felügyelettel és a kapcsolattartás szabályozásával/korlátozásával kapcsolatos eljárásokban", "Az örökösödési eljárásokban", "A cégbejegyzésben", "A közlekedési szabálysértésekben"],
+         e: "Örökbefogadásnál és gyám rendelésekor is kell pszichológiai vélemény."},
+        {q: "Melyik pedagógiai szakszolgálati feladatban NEM alkalmaznak pszichológust?",
+         o: ["Logopédiai ellátás", "Nevelési tanácsadás", "Szakértői bizottsági tevékenység", "Továbbtanulási, pályaválasztási tanácsadás"],
+         e: "Szintén nem: fejlesztő nevelés, konduktív pedagógiai ellátás, gyógytestnevelés."},
+        {q: "Kinek a szakhatósági állásfoglalása alapján engedélyezhető orvostudományi kutatás?",
+         o: ["Az Egészségügyi Tudományos Tanács (ETT) állásfoglalása alapján, az NNGYK engedélyével", "Az MPT Etikai Bizottságáé alapján", "Az Oktatási Hivatalé alapján", "Elég a kutató saját döntése"],
+         e: "Minden kutatóintézmény IKEB-et működtet."},
+        {q: "Mi a „beavatkozással nem járó vizsgálat” definíciója?",
+         o: ["A kutatás során végzett eljárás nem tér el a megszokott egészségügyi ellátástól", "Olyan kutatás, amelyhez nem kell beleegyezés", "Csak kérdőíves kutatás", "Állatokon végzett vizsgálat"],
+         e: "Szabályai nagyban egyeznek az orvostudományi kutatáséval."}
+      ]
+    },
+    {
+      cim: "Munkavégzési formák, szerződések",
+      kerdesek: [
+        {q: "Melyik törvény a Munka törvénykönyve?",
+         o: ["2012. évi I. törvény", "1992. évi XXXIII. törvény", "2013. évi V. törvény", "2009. évi CXV. törvény"],
+         e: "A munkaviszony hierarchikus, „nem önálló tevékenység”."},
+        {q: "Legfeljebb mennyi próbaidő köthető ki munkaszerződésben?",
+         o: ["3 hónap", "1 hónap", "6 hónap", "12 hónap"],
+         e: "A próbaidő alatt a munkaviszony azonnali hatállyal megszüntethető."},
+        {q: "Legalább mennyi időnek kell eltelnie a munkaidő vége és a következő napi munkaidő kezdete között?",
+         o: ["11 órának", "8 órának", "12 órának", "24 órának"],
+         e: "Heti két pihenőnap is jár (egyenlőtlenül is beosztható)."},
+        {q: "Hány nap alapszabadság jár minden naptári évben?",
+         o: ["20 nap", "25 nap", "15 nap", "30 nap"],
+         e: "Plusz életkor szerinti pótszabadság (max. +10) és gyermekek után (gyermekenként 2, max. +7)."},
+        {q: "Hány nap apasági szabadság jár a gyermek születésekor?",
+         o: ["10 nap", "5 nap", "44 nap", "20 nap"],
+         e: "3 éves korig további 44 nap szülői szabadság."},
+        {q: "Hány nap szabadságot kell a munkavállaló kérése szerint kiadni?",
+         o: ["7 munkanapot (legfeljebb 2 részletben)", "14 napot", "Az összeset", "3 napot"],
+         e: "14 egybefüggő nap szabadságot mindenképp biztosítani kell."},
+        {q: "Mikor váltható meg pénzben a szabadság?",
+         o: ["Csak a munkaviszony megszűnésekor", "Bármikor, a munkavállaló kérésére", "Év végén", "Soha"],
+         e: ""},
+        {q: "Mekkora a munkáltatói felmondásnál járó végkielégítés?",
+         o: ["3 év után 1 havi, legfeljebb 6 havi távolléti díj", "Minden esetben 12 havi", "1 év után 3 havi", "Nincs végkielégítés"],
+         e: "A felmondási idő 30–90 nap."},
+        {q: "Milyen határidőn belül kell gyakorolni az azonnali felmondás jogát súlyos szerződésszegés esetén?",
+         o: ["15 napon belül (objektív határidő 1 év)", "30 napon belül", "3 napon belül", "Bármikor"],
+         e: "Ilyenkor nincs felmondási idő, és munkáltatói felmondásnál sincs végkielégítés."},
+        {q: "Mennyi szociális hozzájárulási adót fizet a munkáltató a munkabér után?",
+         o: ["13%", "15%", "18,5%", "27%"],
+         e: "A munkavállaló szja-t (15%) és tb-járulékot (18,5%) fizet – ezeket a munkáltató vonja le."},
+        {q: "Melyik törvény szabályozza a közalkalmazottak jogállását?",
+         o: ["1992. évi XXXIII. törvény (Kjt.)", "2012. évi I. törvény", "2023. évi LII. törvény", "2020. évi C. törvény"],
+         e: "Mögöttes jogszabálya az Mt."},
+        {q: "Mi határozza meg a közalkalmazott fizetési fokozatát?",
+         o: ["A közalkalmazotti jogviszonyban töltött idő (háromévenként)", "A végzettség", "A munkahelyi vezető döntése", "Az életkor"],
+         e: "A fizetési osztályt a végzettség határozza meg."},
+        {q: "Mi az egészségügyi szolgálati jogviszony és a köznevelési foglalkoztatotti jogviszony?",
+         o: ["A közalkalmazotti jogviszony speciális formái", "A munkaviszony helyettesítői", "Vállalkozói formák", "Megbízási szerződések"],
+         e: "2020. évi C. tv., illetve 2023. évi LII. tv."},
+        {q: "Hogyan felel az egyéni vállalkozó tevékenységéért?",
+         o: ["Teljes vagyonával", "Csak a vállalkozásba bevitt vagyonnal", "Nem felel", "Csak az alaptőke erejéig"],
+         e: "Nem válik el a vállalkozó és a természetes személy (2009. évi CXV. tv.)."},
+        {q: "Melyik ÖVTJ-kódhoz tartozik a tanácsadás (nem egészségügyi szolgáltatásként)?",
+         o: ["869903 – Egyéb mentál-egészségügyi ellátás", "869301 – Mentál-egészségügyi ellátás, pszichoterápia", "869302 – Pszichológusi ellátás", "855900 – Egyéb oktatás"],
+         e: ""},
+        {q: "Mennyi időre szüneteltetheti tevékenységét az egyéni vállalkozó?",
+         o: ["Legalább 1 hónapra, legfeljebb 3 évre", "Legfeljebb 6 hónapra", "Legfeljebb 10 évre", "Nem szüneteltetheti"],
+         e: ""},
+        {q: "Mekkora költséghányadot vehet figyelembe az átalányadózó egyéni vállalkozó (az előadás szerint)?",
+         o: ["45%", "40%", "80%", "10%"],
+         e: "Választhat tételes költségelszámolást is; KATA-t, ha csak magánszemélynek számláz."},
+        {q: "Melyik gazdasági társaságnál korlátlan a tagok felelőssége?",
+         o: ["Kkt. tagjai és a Bt. beltagja", "Kft. tagjai", "Rt. részvényesei", "Egyik sem"],
+         e: "Kkt. és Bt. kötelező alaptőke nélkül alakul."},
+        {q: "Mekkora a Kft. kötelező alaptőke-minimuma?",
+         o: ["3 millió Ft", "5 millió Ft", "20 millió Ft", "Nincs minimum"],
+         e: "Rt.: 5M (zártkörű) / 20M (nyilvános)."},
+        {q: "Ki vezeti a cégjegyzéket?",
+         o: ["A területileg illetékes Törvényszék Cégbírósága", "A NAV", "A KSH", "Az önkormányzat"],
+         e: "Kötelező a jogi képviselet; a társaság bejegyzéssel, az alapításra visszamenő hatállyal jön létre."},
+        {q: "Mi a különbség a semmis és a megtámadható szerződés között?",
+         o: ["A semmis már a megkötéskor sem érvényes; a megtámadhatót sikeresen meg kell támadni (1 évig) ahhoz, hogy érvénytelen legyen", "Nincs különbség", "A megtámadható mindig érvényes marad", "A semmis szerződés 1 év után érvényessé válik"],
+         e: ""},
+        {q: "Milyen szerződés lehet a pszichológiai tanácsadás, és milyen kötelem jellemzi?",
+         o: ["Megbízási szerződés – gondossági kötelem: a díj az eredmény nélkül is jár", "Vállalkozási szerződés – eredménykötelem", "Adásvételi szerződés", "Bérleti szerződés"],
+         e: "Vállalkozási szerződésben eredmény nélkül nem jár díjazás."},
+        {q: "Mikor minősülhet egy megbízási szerződés bújtatott munkaviszonynak?",
+         o: ["Ha rendszeres munkavégzést, rendszeres díjat, munkakört, személyes munkavégzést, rendelkezésre állást és széleskörű utasítási jogot köt ki", "Ha egyszeri feladatra szól", "Ha a díj az eredményhez kötött", "Ha írásban kötötték"],
+         e: "Akkor is, ha adó- és járulékelkerülési célból megbízásként kötik."},
+        {q: "Mely esetben NEM korlátozható a szerződésszegésért való kártérítési felelősség?",
+         o: ["Ha az emberi életet, testi épséget vagy egészséget megkárosító szerződésszegésről van szó", "Késedelmes teljesítésnél", "Hibás teljesítésnél", "Szóbeli szerződésnél"],
+         e: ""}
+      ]
+    },
+    {
+      cim: "Civil szervezetek, adatvédelem",
+      kerdesek: [
+        {q: "Mi a különbség az egyesület és az alapítvány között?",
+         o: ["Az egyesület személyegyesülés, az alapítvány vagyonelkülönítés", "Az egyesület vagyonelkülönítés, az alapítvány személyegyesülés", "Mindkettő gazdasági társaság", "Nincs különbség"],
+         e: ""},
+        {q: "Hány fő alapíthat egyesületet?",
+         o: ["10 fő", "2 fő", "5 fő", "50 fő"],
+         e: "Alapszabály elfogadásával, társadalmi célra; nincs alaptőke-követelmény."},
+        {q: "Mi az egyesület elsődleges forrása?",
+         o: ["A tagdíj", "Az állami normatíva", "Az alaptőke", "A szja 1%"],
+         e: ""},
+        {q: "Milyen feltétellel ajánlható fel egy szervezetnek az szja 1%-a?",
+         o: ["Legalább 2 éve be van jegyezve, bejelentkezett a NAV nyilvántartásába, közhasznú tevékenységet végez", "Bármely civil szervezetnek azonnal", "Csak alapítványnak", "Csak állami intézménynek"],
+         e: ""},
+        {q: "Módosítható-e az alapítványi cél az alapítást követően?",
+         o: ["Nem módosítható", "Igen, bármikor az alapító döntésével", "Igen, a kuratórium döntésével", "Csak évente egyszer"],
+         e: "Az alapítónak nem lehet döntő befolyása a kuratóriumban."},
+        {q: "Ki gyakorol törvényességi felügyeletet az egyesületek és alapítványok felett?",
+         o: ["Az ügyészség", "A NAV", "A Cégbíróság", "Az önkormányzat"],
+         e: "Nyilvántartásba a székhely szerinti Törvényszék veszi."},
+        {q: "Mióta szabályozza a személyes adatok védelmét a GDPR?",
+         o: ["2018. május 25-től", "2011-től", "2016. január 1-től", "2020-tól"],
+         e: "A GDPR által nem szabályozott kérdésekben a 2011. évi CXII. tv. (Infotörvény) az irányadó."},
+        {q: "Mi a különleges adat?",
+         o: ["Pl. faji eredetre, nemzetiségre, egészségi állapotra, kóros szenvedélyre vonatkozó személyes adat – fokozottan védett", "Minden telefonszám", "A cégek pénzügyi adatai", "Az anonimizált statisztikai adat"],
+         e: "Különleges adatnál a hozzájárulás az elsődleges jogalap."},
+        {q: "Mit jelent a célhoz kötöttség és az adattakarékosság elve?",
+         o: ["Csak meghatározott célból, és csak a cél megvalósulásához elengedhetetlenül szükséges adat kezelhető", "Minden adat bármilyen célra kezelhető, ha az érintett tud róla", "Az adatot legalább 10 évig meg kell őrizni", "Csak papíron szabad adatot tárolni"],
+         e: ""},
+        {q: "Melyik NEM GDPR-jogalap?",
+         o: ["Az adatkezelő puszta kíváncsisága", "Szerződés teljesítése", "Jogi kötelezettség teljesítése", "Az érintett hozzájárulása"],
+         e: "Jogalapok: szerződés, jogi kötelezettség, létfontosságú érdek, jogos érdek, hozzájárulás, közérdekű/közhatalmi adatkezelés."},
+        {q: "Mikor kell adatvédelmi tisztviselőt kinevezni?",
+         o: ["Bizonyos adatkezeléseknél, pl. közhatalmi tevékenység vagy egészségügyi adatok kezelése esetén", "Minden egyéni vállalkozónál", "Soha, ez a NAIH feladata", "Csak 1000 fő feletti cégnél"],
+         e: "Nagymennyiségű, rendszeres adatkezelésnél előzetes hatásvizsgálat is kell."}
+      ]
+    }
+  ]
+});
+
+/* ---- 06-alapprotokoll.js ---- */
+TANANYAG({
+  id: "alapprotokoll-2025",
+  cim: "A Pszichológiai Tanácsadás Szakmai Alapprotokollja",
+  targy: "Szakirodalom",
+  forras: "Kissné Viszket Mónika – Mogyorósy Zsuzsanna (2025/2026, ELTE PPK)",
+  fajl: "Viszket Alapprotokoll web.pdf",
+  felveve: "2026-11-22",
+  temak: [
+    {
+      cim: "Bevezetés, keretrendszer",
+      kerdesek: [
+        {q: "Milyen fogalomhasználat megfontolását javasolja az alapprotokoll a „pszichológiai tanácsadás” helyett a jövőben?",
+         o: ["„Pszichológiai konzultáció”", "„Pszichológiai kezelés”", "„Életvezetési coaching”", "„Lelki gondozás”"],
+         e: "A magyar „tanácsadás” pontatlan, nem közvetíti a konzultálás, tanácskozás jellegét."},
+        {q: "Kit tartanak a pszichológiai, terápiás tanácsadás megalkotójának?",
+         o: ["Carl Rogerst", "Frank Parsonst", "Sigmund Freudot", "Aaron T. Becket"],
+         e: "Munkásságának köszönhetően vált a tanácsadás az alkalmazott pszichológia bővülő területévé."},
+        {q: "Ki írta 1891-ben a kőszegi Bencés Gimnázium évkönyvében „Az életpályaválasztás kérdése…” című írást?",
+         o: ["Zanathy Bódog", "Nagy László", "Mérei Ferenc", "Schell János"],
+         e: "A hazai pszichológiai tanácsadás is az életpálya kérdéseivel indult."},
+        {q: "Ki vezetésével jött létre 1909-ben az első hazai pályaválasztási laboratórium?",
+         o: ["Nagy László", "Ritoók Magda", "Csirszka János", "Schell János"],
+         e: "Pályaválasztással és a tehetséges gyerekek kiválasztásával foglalkoztak."},
+        {q: "Ki hozta létre 1929-ben az Állami Gyógypedagógiai Nevelési és Pályaválasztási Tanácsadót?",
+         o: ["Schell János", "Nagy László", "Mérei Ferenc", "Takács Márta"],
+         e: "Orvosok, gyermekpszichiáterek, pszichológusok, pedagógusok, szociális gondozók dolgoztak ott."},
+        {q: "Ki írta 1942-ben „A pályaválasztás lélektana” című könyvet?",
+         o: ["Mérei Ferenc", "Ritoók Magda", "Nagy László", "Zanathy Bódog"],
+         e: "Fókuszba került a döntés, a szabad, egyénhez igazodó választás."},
+        {q: "Ki vezette a Munkaügyi Minisztérium Országos Pályaválasztási Csoportját/Intézetét?",
+         o: ["Ritoók Magda", "Takács Márta", "Csirszka János", "Oláh Attila"],
+         e: "Megszervezték a megyei Pályaválasztási Intézetek hálózatát. Takács Márta a Fővárosi Pályaválasztási Intézet (1967) vezető pszichológusa volt."},
+        {q: "Mi jött létre 2005-ben az ELTE PPK-n Oláh Attila irányításával?",
+         o: ["A Tanácsadás- és iskolapszichológia szakirány az MA-képzésben", "A tanácsadó szakpszichológus szakirányú továbbképzés", "Az első iskolapszichológusi hálózat", "Az MPT Tanácsadás Pszichológiai Szekció"],
+         e: "A szakirányú továbbképzés 1993-ban indult; az első budapesti iskolapszichológusi hálózat szintén 1993-ban."},
+        {q: "Melyik korcsoport számára nincs biztosítva államilag fenntartott intézményrendszer pszichológiai tanácsadásra?",
+         o: ["A felnőtt populáció", "A gyermekek", "A serdülők", "Az egyetemi hallgatók"],
+         e: "Gyermekeknek ott vannak a szakszolgálatok, családsegítők, iskolapszichológusok, diáktanácsadók."},
+        {q: "Mikor készült el az első alapprotokoll, és mikor újították meg?",
+         o: ["2019-ben készült, 2025-ben újították meg", "2009-ben készült, 2019-ben újították meg", "2017-ben készült, 2023-ban újították meg", "1993-ban készült, 2015-ben újították meg"],
+         e: "Kidolgozásában iránymutató volt a Szakszolgálati Alapprotokoll."},
+        {q: "Melyik a szakmai útmutatók hat típusa Torda és Nagyné Réz (2013) szerint?",
+         o: ["Protokoll, sztenderd, irányelv, ajánlás, vélemény, jó gyakorlat", "Törvény, rendelet, határozat, utasítás, ajánlás, vélemény", "Protokoll, algoritmus, eljárásrend, sztenderd, kódex, szabályzat", "Irányelv, ajánlás, kézikönyv, tankönyv, jegyzet, cikk"],
+         e: ""},
+        {q: "Melyik szakmai útmutató-típus fogalmazza meg a kötelező minimumot törvény, rendelet szintjén?",
+         o: ["Irányelv", "Protokoll", "Sztenderd", "Ajánlás"],
+         e: "Sztenderd: tudományos kutatással alátámasztott; protokoll: általánosított szabályzó; ajánlás: helyi gyakorlat alapján, általános érvényű."},
+        {q: "Melyik útmutató-típus a tudományos kutatással, tanulmánnyal alátámasztott dokumentum?",
+         o: ["Sztenderd", "Vélemény", "Jó gyakorlat", "Protokoll"],
+         e: "A vélemény szakmai tapasztalaton alapul, nélkülözi a tudományos kutatást."},
+        {q: "Melyik útmutató-típus helyi intézményi gyakorlatot mutat be, amely mintaértéke miatt adaptálhatóvá válhat?",
+         o: ["Jó gyakorlat", "Ajánlás", "Irányelv", "Sztenderd"],
+         e: ""},
+        {q: "Mi az alapprotokoll típusa a fenti hierarchiában?",
+         o: ["Protokoll – általános szakmai szabályzó, amely eljárásrendekkel, algoritmusokkal kiegészíthető; nem sztenderd és nem irányelv", "Irányelv – jogszabályi szintű kötelező minimum", "Sztenderd – kutatással alátámasztott", "Jó gyakorlat – egy intézmény bemutatása"],
+         e: "Tudományos munkák mentén építkezik, de nem sztenderd; bemutatja a jogi környezetet, de nem irányelv."},
+        {q: "Milyen modellt követ a protokolltípusok közül (Plant, 2001) az alapprotokoll?",
+         o: ["Bemenet–folyamat–kimenet modellt (folyamatsztenderdekre fókuszál)", "ISO típusú minőségrendszert", "Gazdasági kimenetet hangsúlyozó modellt", "Menedzsmentközpontú modellt"],
+         e: "Ez felel meg leginkább a pszichológiai tanácsadás profiljának."},
+        {q: "Mi a kritikája az ISO típusú tanácsadói protokolloknak?",
+         o: ["Gyakran területidegen szóhasználatúak, merevnek tűnnek, kevésbé segítik az innovációt", "Túl rugalmasak", "Nem foglalkoznak a minőséggel", "Csak a kliens szemszögét veszik figyelembe"],
+         e: ""},
+        {q: "Mit határoz meg a „tanulási kimenetek modell”?",
+         o: ["Milyen készségekkel, tudással kell rendelkeznie a kliensnek a tanácsadási folyamat végére", "A tanácsadás gazdasági hasznát", "A tanácsadó bérét", "A minőségbiztosítási indikátorokat"],
+         e: "Pl. önismeret, karriertervezés kategóriákkal dolgozik."}
+      ]
+    },
+    {
+      cim: "Képzés, foglalkoztatás, célcsoportok",
+      kerdesek: [
+        {q: "Mi a felvétel feltétele a tanácsadó szakpszichológus szakirányú továbbképzésre?",
+         o: ["Pszichológia MA (vagy BA + egészségpszichológia MA) oklevél és egy év igazolt pszichológiai szakmai gyakorlat", "Bármely BA oklevél", "Pszichológia BA oklevél gyakorlat nélkül", "Pszichoterapeuta szakvizsga"],
+         e: ""},
+        {q: "Mennyi a képzési idő és a kreditszám?",
+         o: ["4 félév, 120 kredit (555 tanóra)", "2 félév, 60 kredit", "6 félév, 180 kredit", "4 félév, 90 kredit"],
+         e: "Alapozó szakasz: 60 kredit; specializáció: 50 kredit."},
+        {q: "Mi a záróvizsgára bocsátás feltétele az önismereti munkát illetően?",
+         o: ["150 óra egybefüggő, pszichoterapeuta által vezetett és igazolt önismereti munka (csoportos vagy egyéni)", "50 óra bármilyen önismereti munka", "300 óra egyéni analízis", "Nincs ilyen feltétel"],
+         e: ""},
+        {q: "Melyik a képzés három választható specializációja?",
+         o: ["Munka- és pályatanácsadás; családi és párkapcsolati tanácsadás; krízistanácsadás", "Iskola-, klinikai és szervezetpszichológia", "Egyéni, csoportos és online tanácsadás", "Gyermek-, felnőtt- és időskori tanácsadás"],
+         e: "A munkapálya-irány 1993-tól, a krízis- és családspecializáció 1999-től."},
+        {q: "Ki alapította 1993-ban a tanácsadó szakpszichológusi képzést?",
+         o: ["Ritoók Magda", "Oláh Attila", "Kissné Viszket Mónika", "Mérei Ferenc"],
+         e: "Az akkori ELTE BTK-n, 25 fővel indult; 2007-ben akkreditált képzés lett."},
+        {q: "Mi a szakképzettség angol megnevezése az oklevélben?",
+         o: ["Counselling psychologist", "Clinical psychologist", "Guidance counsellor", "Psychological consultant"],
+         e: "Képzési terület: bölcsészettudomány."},
+        {q: "Melyik NEM szerepel a tanácsadó szakpszichológus foglalkoztatási területei között az alapprotokollban?",
+         o: ["Pszichiátriai osztályon pszichoterápia önálló végzése", "Köznevelés (iskola-, óvodapszichológus)", "Rendvédelem", "Katasztrófavédelem"],
+         e: "Területek: köznevelés, szociális szféra, munka- és szervezetpszichológia, diáktanácsadás, rendvédelem, katasztrófavédelem, felsőoktatás/kutatás, magánpraxis."},
+        {q: "Mit jelent a „szabad hozzáférés elve”, és hol nem valósul meg?",
+         o: ["Mindenki számára közvetlen hozzáférés a tanácsadáshoz – felnőtt- és időskorban nem valósul meg", "Ingyenes egészségügyi ellátás – gyermekkorban nem valósul meg", "A tanácsadó szabad módszerválasztása – iskolában nem érvényes", "Szabad adatkezelés – sehol nem érvényes"],
+         e: "Oka a költségek és a központilag szabályozott rendszer hiánya."},
+        {q: "Melyik a célcsoportok rendszerszintje szerinti felosztás?",
+         o: ["Egyén, pár, család, csoport, szervezet, közösség", "Gyermek, serdülő, felnőtt, idős", "Enyhe, közepes, súlyos", "Önkéntes, küldött, hozott"],
+         e: ""},
+        {q: "Melyik csoport tartozik az alapprotokoll szerint a speciális vagy veszélyeztetett célcsoportokhoz?",
+         o: ["Szubklinikai szintű mentális zavarral élők, akik nem igényelnek klinikai pszichoterápiát", "Akut pszichotikus állapotban lévők", "Kizárólag kiskorúak", "Csak a munkanélküliek"],
+         e: "Továbbá: krízishelyzetben lévők, egészségügyi kihívással élők, marginalizált csoportok."}
+      ]
+    },
+    {
+      cim: "Etika, eszközhasználat, infrastruktúra",
+      kerdesek: [
+        {q: "Melyik dokumentum alapelvei az etikai iránymutatók az alapprotokollban?",
+         o: ["A 2025-ben megújított Pszichológusok Szakmai Etikai Kódexe (SZEK)", "Az APA 1953-as etikai kódexe", "A Pedagógus Etikai Kódex", "A Magyar Orvosi Kamara Etikai Kódexe"],
+         e: "A társszakmai kódexek közvetetten meghatározó értékűek."},
+        {q: "Melyik NEM tartozik a segítő szakmák egyetemes erkölcsi alapelvei közé az alapprotokoll szerint?",
+         o: ["Eredményesség bármi áron", "Az emberi méltóság tisztelete", "Feddhetetlenség", "Segíteni akarás"],
+         e: "Alapelvek: emberi méltóság tisztelete; elkötelezettség és felelősség; feddhetetlenség; szakszerűség; segíteni akarás."},
+        {q: "Mi történik, ha olyan pszichológus ellen tesznek etikai panaszt, aki sem az MPT-nek, sem más szakmai egyesületnek nem tagja?",
+         o: ["Szakmai szervezeten belül etikai eljárás nem indítható; munkáltatói vagy bírósági út lehetséges", "Az MPT ettől függetlenül kivizsgálja", "Automatikusan elveszti a diplomáját", "Az Oktatási Hivatal jár el"],
+         e: ""},
+        {q: "Mit kell szem előtt tartani a hirdetéseknél?",
+         o: ["Legyenek szakmai és tapasztalati alapúak, ne keltsék kliens-kapcsolat látszatát, pontos adatokat tartalmazzanak (képesítés, szolgáltatás, díj)", "Tartalmazzanak elégedett kliens-véleményeket név szerint", "Ígérjenek garantált eredményt", "Hirdetés tilos"],
+         e: ""},
+        {q: "Milyen mérőeszközöket használhat a tanácsadó szakpszichológus?",
+         o: ["Jogtiszta, az MPT Tesztbizottsága által elfogadott, standardizált kérdőíveket és teszteket", "Bármely interneten talált tesztet", "Csak saját fejlesztésű kérdőíveket", "Csak orvos által előírt teszteket"],
+         e: "A jogosultságra az MPT Tesztbizottsága által előírt szabályok irányadóak (Teszthasználati irányelvek, 2015. dec. 15.)."},
+        {q: "Hogyan kezeli a pszichológus a mérések eredményeit a klienssel?",
+         o: ["Szóban közli és megbeszéli; a mérőeszközt nem bocsátja rendelkezésére", "Átadja a kitöltött tesztlapot és a kézikönyvet", "Csak írásban, e-mailben küldi el", "Nem közli az eredményt"],
+         e: ""},
+        {q: "Mekkora minimális helyiségméretet javasol a minimumfeltétel-javaslat egyéni foglalkozásra?",
+         o: ["Minimum 10 m²", "Minimum 6 m²", "Minimum 15 m²", "Minimum 25 m²"],
+         e: "Gyermekkel, családdal, csoporttal: minimum 15 m²."},
+        {q: "Mekkora helyiség javasolt gyermekkel való munkához, családi vagy csoportos foglalkozáshoz?",
+         o: ["Minimum 15 m²", "Minimum 10 m²", "Minimum 30 m²", "Minimum 8 m²"],
+         e: "Az MPT Tanácsadás Pszichológiai Szekció 2016-os javaslata."},
+        {q: "Milyen ülőalkalmatosság javasolt a tanácsadói helyiségbe?",
+         o: ["Kényelmes, de nem fekvő fotelek vagy székek", "Pszichoanalitikus dívány", "Csak irodai forgószék", "Babzsák"],
+         e: "Továbbá asztal és óra a falon vagy az asztalon."},
+        {q: "Melyik NEM szerepel a tanácsadói helyiség lélektani munkához szükséges feltételei között?",
+         o: ["Állandó háttérzene", "Zavartalanság", "Vizuális és hangszigetelés", "Otthonosság"],
+         e: "Feltételek: biztonság, kényelem, zavartalanság, otthonosság, megfelelő fény- és hőviszonyok, szigetelés, tisztaság."},
+        {q: "Mi a személyi feltétele a tanácsadó szakpszichológiai tevékenységnek a minimumfeltételek szerint?",
+         o: ["Tanácsadó szakpszichológusi végzettség, valamint esetmegbeszélés és/vagy szupervízió elérhetősége", "Pszichoterapeuta szakvizsga", "Orvosi felügyelet", "Legalább 10 év gyakorlat"],
+         e: ""}
+      ]
+    },
+    {
+      cim: "A tanácsadás folyamata",
+      kerdesek: [
+        {q: "Kinek a modelljét veszi alapul az alapprotokoll folyamatmodellje?",
+         o: ["Egan (2016)", "Argelander (2006)", "Wiegersma (1976)", "Tietze (2002)"],
+         e: "Cél: a kliens megismerje saját erőforrásait, és hatékonyan alkalmazza őket."},
+        {q: "Melyek a folyamatmodell főbb lépései?",
+         o: ["Prevenció, szűrés, a tanácsadói kapcsolat első lépései, tanácsadói intervenciók, értékelő-visszajelző szakasz", "Diagnózis, terápia, rehabilitáció", "Felvétel, kezelés, elbocsátás", "Exploráció, értelmezés, átdolgozás, lezárás"],
+         e: "Bemenet–folyamat–kimenet struktúra."},
+        {q: "Mi az elsődleges prevenció célja (Hajduska, 2010)?",
+         o: ["A kóros folyamat kialakulásának megakadályozása, a diszfunkciót okozó tényezők csökkentése", "A már elindult kórfolyamat megállítása", "A visszaesés megelőzése, rehabilitáció", "A tünetek gyógyszeres kezelése"],
+         e: "Másodlagos: a kialakult zavar korai felfedezése; harmadlagos: állapotrosszabbodás és szövődmények megelőzése, rehabilitáció."},
+        {q: "A pályatanácsadásban minek feleltethető meg a kliens kezdeményezésére történő személyes tanácsadás, illetve a pályakorrekció?",
+         o: ["Másodlagos, illetve harmadlagos prevenció", "Elsődleges, illetve másodlagos prevenció", "Harmadlagos, illetve elsődleges prevenció", "Mindkettő elsődleges prevenció"],
+         e: ""},
+        {q: "Kiknek a prevenciós rendszere vesz figyelembe az egyéni tényezők mellett politikai, szociális változásokat is?",
+         o: ["Romano és Hage (2000)", "Baker és Shaw (1987)", "Larson és Daniels (1998)", "Hackney és Cormier (2005)"],
+         e: "Hat dimenzió; az 5. és 6. dimenziót együtt kockázatcsökkentő stratégiának nevezik."},
+        {q: "„Minél később kezd valaki dohányozni, annál kisebb az addikció kockázata.” Romano és Hage melyik prevenciós dimenziója ez?",
+         o: ["A problémás viselkedés megjelenésének késleltetése", "Kockázatcsökkentés", "A problémás viselkedés hatásának csökkentése", "Intézményes szintű döntések"],
+         e: "3. dimenzió."},
+        {q: "Mikor lehet szükség szűrésre tanácsadó szakpszichológusi tevékenységként?",
+         o: ["Speciális állapotok felmérésekor (munkaalkalmasság, iskolaérettség) vagy mentális rendellenességek kizárásakor (pl. kiégésközeli állapot)", "Minden első interjú előtt kötelezően", "Csak bírósági elrendelésre", "Soha, ez klinikai feladat"],
+         e: "Egyéni vagy csoportos formában is megvalósulhat."},
+        {q: "Mi szükséges, ha kutatás kapcsán indul szűrési folyamat kiskorúaknál?",
+         o: ["Kutatásetikai engedély, az intézmény engedélye és a szülő írásbeli beleegyezése", "Elég a kiskorú szóbeli beleegyezése", "Elég az iskolaigazgató szóbeli engedélye", "Nincs szükség engedélyre"],
+         e: ""},
+        {q: "Mit kell tennie a szűrést végző szakembernek, ha nincs rendelkezésre álló eljárásrend a további ellátást igénylő állapot esetén?",
+         o: ["Egyéni vagy csoportos szakmai szupervíziós segítséget igénybe venni a döntésekhez", "Ellátás nélkül lezárni az esetet", "Saját maga megkezdeni a pszichoterápiát", "A rendőrséget értesíteni"],
+         e: ""},
+        {q: "Melyek a tanácsadás folyamatábrájának (Kissné Viszket & Mogyorósy, 2017) első szakaszának elemei?",
+         o: ["Rapportépítés, tanácsadói első interjú, helyzetértékelő diagnózis, fókuszkijelölés", "Tanácsadói intervenciók, lezárás", "Prevenció és szűrés", "Szupervízió és szakvélemény"],
+         e: "2. szakasz: intervenciók; 3. szakasz: lezárás."},
+        {q: "Kinek a besorolása ad szempontokat a kliens kezdeti motivációjával és az első interjú technikájával kapcsolatban?",
+         o: ["Argelander", "Egan", "Ivey", "Rogers"],
+         e: "A kliens lehet önként jelentkező, „küldött” vagy „hozott”."},
+        {q: "Mely nonspecifikus hatótényezők alapozzák meg a tanácsadás hatékonyságát?",
+         o: ["A rogersi hármas: empátia, hitelesség (kongruencia), feltétel nélküli elfogadás", "Értelmezés, szembesítés, tisztázás", "Megerősítés, büntetés, kioltás", "Diagnózis, kezelés, utánkövetés"],
+         e: ""},
+        {q: "Melyik téves hiedelmet kell tisztázni a tanácsadás kezdetén?",
+         o: ["„A jó tanácsadó gyors megoldást tud a problémámra.”", "„A tanácsadásban aktívan részt kell vennem.”", "„A tanácsadó segít új szempontokat meglátni.”", "„A tanácsadás korlátozott célokat követ.”"],
+         e: "Hasonlóan: „csak akkor fordul valaki tanácsadóhoz, ha komoly mentális problémája van”."},
+        {q: "Melyik a tanácsadói első interjú három alapvető típusa?",
+         o: ["Általános (felmérő) első interjú, krízisinterjú, speciális tanácsadói interjú", "Strukturált, félig strukturált, strukturálatlan", "Egyéni, páros, csoportos", "Diagnosztikus, terápiás, utánkövető"],
+         e: ""},
+        {q: "Mi a speciális tanácsadói interjú (pl. munkaköri, pályaalkalmasság) jellemző kimenetele?",
+         o: ["Egy döntés vagy szakvélemény", "Szerződéskötés vagy továbbküldés", "Krízisintervenció", "Pszichoterápia"],
+         e: "Az általános és a krízisinterjú kimenete szerződéskötés vagy továbbküldés."},
+        {q: "Milyen rendszerekben gondolkodik a tanácsadói helyzetértékelő diagnózis?",
+         o: ["Nem pszichopatológiai rendszerekben – az egészségesség, megküzdés, szükségletek, sémák, fejlődési szintek mentén", "A DSM és BNO kategóriái szerint", "Kizárólag tesztpontszámok alapján", "A pszichoanalitikus strukturális diagnózis szerint"],
+         e: "Oláh (pszichológiai immunrendszer), Grawe (szükségletek), Young (sémák), Erikson, Arnett (fejlődés)."},
+        {q: "Mikor nem alkalmas a tanácsadói kompetencia a probléma kezelésére?",
+         o: ["Súlyos, permanens vagy gyakran visszatérő nehézség, illetve több mint két életterület súlyos hiányossága esetén", "Ha egy életterület érintett", "Ha a nehézség akcidentális krízishez köthető", "Ha a kliens saját motivációból jelentkezett"],
+         e: "Ilyenkor a klienst megfelelő kompetenciájú szakemberhez kell irányítani."},
+        {q: "Melyik kérdés feltétlenül szükséges a tanácsadói kompetencia megállapításához?",
+         o: ["Köthető-e fejlődési vagy akcidentális krízishez az észlelt distressz?", "Milyen gyógyszert szed a kliens?", "Mennyi a kliens jövedelme?", "Milyen pártra szavaz a kliens?"],
+         e: "Továbbá: mutat-e ismétlődést; mióta áll fenn; az öt funkcióból mennyi érintett; milyen mértékű a hiányosság."},
+        {q: "Melyik eszköz javasolt a kötődés, bizalom, intimitás területén a családi, baráti kapcsolatok feltérképezésére?",
+         o: ["Szociális atom, Genogram", "MBI", "Beck Depresszió Kérdőív", "Élet Értelme Kérdőív"],
+         e: "Kapcsolati traumákhoz: Életvonal; kapcsolati nézetekhez: DAS-kérdőív."},
+        {q: "Melyik eszköz javasolt a kiégés vagy kiégésközeli állapot felmérésére?",
+         o: ["MBI (Maslach Burnout Inventory)", "Genogram", "Szociális atom", "Szondi-teszt"],
+         e: "A teljesítmény, kompetencia, működési hatékonyság területén."},
+        {q: "Mi jellemzi a munkaszakasz „vágyott helyzet” fázisát?",
+         o: ["A jövő kap hangsúlyt – „mit szeretnék, mire van szükségem”; a kliens szabadon tervez, a tanácsadó a reális célok felé segíti", "A múlt traumáinak részletes feltárása", "A tesztek felvétele", "A szerződés felbontása"],
+         e: "Ezt követi a reális célok és próbacselekvések fázisa."},
+        {q: "Melyik képlet szemlélteti a tanácsadó szerepét a munkaszakaszban?",
+         o: ["Kliens fókusza = Probléma; Tanácsadó fókusza = Probléma + Kliens + Konzultációs folyamat + Cél", "Kliens fókusza = Cél; Tanácsadó fókusza = Probléma", "R = f(S, O, K, C)", "Tanácsadó fókusza = Diagnózis + Kezelés"],
+         e: ""},
+        {q: "Melyik NEM lehetséges kimenetele a tanácsadás záró szakaszának?",
+         o: ["A kliens kötelező átirányítása pszichiátriai osztályra minden esetben", "Közös munka lezárása a hozott probléma megoldásával", "Folytatás a fókusz módosításával, új fókusz kijelölésével", "Lezárás továbbküldéssel"],
+         e: ""},
+        {q: "Mi a tanácsadói csoportos szupervízió tematikájának speciális jellemzője?",
+         o: ["Sokkal inkább „esetcentrikus” – kisebb hangsúlyt kap az áttétel, viszontáttétel, mint a folyamat, fókusz, fázisok", "Kizárólag az áttétel elemzésére épül", "A tanácsadó magánéletére fókuszál", "Nincs struktúrája"],
+         e: ""}
+      ]
+    },
+    {
+      cim: "Első interjú, fókusz, szakvélemény",
+      kerdesek: [
+        {q: "Kinek az első interjúját követi elsődlegesen a tanácsadói első interjú?",
+         o: ["Argelander első pszichoterápiás interjúját", "Rogers nondirektív interjúját", "Beck kognitív interjúját", "Egan háromlépcsős modelljét"],
+         e: "Tudományos szempontból „mélyinterjú”; integrált „személyiségképet” keres."},
+        {q: "Milyen információk összességéből keres a tanácsadói első interjú integrált személyiségképet?",
+         o: ["Objektív, szubjektív és szituatív (szcenikus) információkból", "Csak tesztpontszámokból", "Csak a hozzátartozók beszámolóiból", "Csak orvosi leletekből"],
+         e: ""},
+        {q: "Melyik az első interjú kezdeményező szerinti három típusa?",
+         o: ["Kliens kezdeményezte, tanácsadó kezdeményezte, információorientált", "Általános, krízis, speciális", "Egyéni, páros, családi", "Személyes, telefonos, online"],
+         e: "Tematika szerint: általános, krízis-, speciális interjú."},
+        {q: "Ivey, Ivey és Zalaquett (2010) hét fókusza közül melyikhez tartozik a „Hogyan szeretné, hogy segítsem?” kérdés?",
+         o: ["Kölcsönösség", "Egyéni hangsúly", "Kérdezés fókusza", "Kultúra/kontextus"],
+         e: "A tanácsadó egyenrangúként kapcsolódik a klienshez."},
+        {q: "Ivey és mtsai szerint melyik fókusznál használja a tanácsadó gyakran a kliens nevét?",
+         o: ["Egyéni hangsúly", "Mások", "Család", "Kölcsönösség"],
+         e: "Hogy a fókuszt a kliensen tartsa."},
+        {q: "Melyik NEM tartozik Ivey és mtsai hét interjúfókusza közé?",
+         o: ["Áttétel", "Fő téma vagy probléma", "Család", "Kultúra/környezet/kontextus"],
+         e: "Hét fókusz: egyéni, fő probléma, mások, család, kölcsönösség, kérdezés, kultúra/kontextus."},
+        {q: "Kik emeltek ki szempontokat a fókuszkijelöléshez (személyes adatok, problémamegjelenítés, életstílus, családtörténet stb.)?",
+         o: ["Hackney és Cormier (2005)", "Romano és Hage (2000)", "Cramer és mtsai (2013)", "Larson és Daniels (1998)"],
+         e: ""},
+        {q: "Mi a helyzetértékelő diagnózis egyik kulcskérdése?",
+         o: ["Megvan-e a kliens kellő motivációja a tanácsadáshoz (aktív, „konzultációs” státusz)?", "Milyen BNO-kód illik a kliensre?", "Milyen gyógyszer javasolt?", "Hány ülés téríthető?"],
+         e: "Továbbá: van-e releváns probléma, kijelölhető-e fókusz; van-e személyes erőforrás; vannak-e külső/belső akadályok."},
+        {q: "Mi a teendő, ha pszichopatológia gyanúja merül fel, de a kliens nem fogadja el a továbbküldést?",
+         o: ["A továbbküldés elfogadása lesz a rövid tanácsadói cél, akár külső kapcsolatok bevonásával", "A tanácsadó lezárja a kapcsolatot", "A tanácsadó megkezdi a pszichoterápiát", "Hivatalból kényszergyógykezelést kér"],
+         e: ""},
+        {q: "Mi a teendő, ha a továbbküldés elfogadott, de közvetlen külső okokból (várakozási idő, távolság) nem megvalósítható?",
+         o: ["Konzultál a klinikai-terápiás hellyel, és javaslatuk szerint terápiára felkészít, erőforrásokat mozgósít vagy fókuszált tanácsadást végez", "Megvárja a terápia kezdetét, addig nem találkozik a klienssel", "Saját hatáskörben pszichoterápiát kezd", "Lezárja az esetet"],
+         e: ""},
+        {q: "Mi a tanácsadói fókusz?",
+         o: ["Célkitűzés, szerződés a klienssel, amely magában foglalja a lehetőségek reális értékelését és a tanácsadás valószínű idejének megvitatását", "A tanácsadó személyes érdeklődési területe", "A teljes élettörténet feltárása", "A diagnózis megnevezése"],
+         e: "A tanácsadás definíciószerűen korlátozott célokat követ (Buda, Ritoók)."},
+        {q: "Mikor nem teszi lehetővé jellemzően a kliens állapota a tanácsadói folyamatot?",
+         o: ["Ha hosszú időn át több életterület instabil – ilyenkor terápia (pszicho- vagy farmakoterápia) szükséges", "Ha egy konkrét döntési helyzetben van", "Ha akcidentális krízisben van", "Ha önként jelentkezett"],
+         e: "A fókusz tartásához erőforrás, strukturáltság, énerő kell."},
+        {q: "Melyik a tanácsadói szakvélemény egyik szempontja?",
+         o: ["Helyzetértékelő diagnózis a kijelölt fókusz mentén", "A teljes nyers tesztpontszám-lista", "A tanácsadó magánvéleménye a családról", "A kliens politikai nézetei"],
+         e: "Szempontok: együttműködés története, adatai; helyzetértékelő diagnózis; jelen helyzetértékelés; javaslatok."},
+        {q: "Mit használhatnak fel a megrendelők (pl. HR-esek, pedagógusok, orvosok) a személy életét befolyásoló döntésekhez?",
+         o: ["A tesztek eredményeire alapozott pszichológiai szakvéleményt – nem önmagukban a teszteredményeket", "A nyers pontértékeket és profilokat", "A kitöltött tesztlapokat", "A tanácsadó jegyzeteit"],
+         e: "MPT Tesztbizottság irányelvei."},
+        {q: "Ki vállalja a felelősséget az automatikus riport formájában kiadott szakvéleményért?",
+         o: ["Minden esetben a pszichológus, akinek aláírását és elérhetőségét fel kell tüntetni", "A szoftver gyártója", "A megrendelő", "Senki"],
+         e: ""},
+        {q: "Mit jelez a folyamatábra cirkuláris jellege (Hackney & Cormier alapján)?",
+         o: ["A lépések nem lezáruló szakaszok, hanem folyamatosan jelen maradnak – pl. a rapportépítés a teljes folyamatban jelen van", "A folyamatot ciklikusan újra kell kezdeni minden ülésen", "A tanácsadás soha nem zárul le", "A lépések sorrendje tetszőleges"],
+         e: "Lépések: kapcsolatépítés → problémafeltárás → célkitűzés → intervenciók → értékelés, befejezés."}
+      ]
+    },
+    {
+      cim: "Speciális helyzetek",
+      kerdesek: [
+        {q: "Kik dolgozták ki a szuicid krízisek kezeléséhez szükséges tíz kulcskompetencia keretrendszerét?",
+         o: ["Cramer és mtsai (2013), Észak-Karolinai Egyetem", "Larson és Daniels (1998)", "Harris és Fallot (2001)", "Geldard és mtsai (2013)"],
+         e: ""},
+        {q: "Melyik az első a tíz szuicid kompetencia közül?",
+         o: ["Önismeret és saját reakciók tudatosítása", "Dokumentáció és indoklás", "Jogi szabályozások ismerete", "Támogató személyek bevonása"],
+         e: "A segítő saját attitűdjei befolyásolják az öngyilkossághoz való viszonyulását."},
+        {q: "Milyen kockázati szinteket különít el a szuicid kockázatbecslés?",
+         o: ["Alacsony, mérsékelt, magas, extrém", "Nincs, van", "Enyhe, súlyos", "1-től 10-ig"],
+         e: ""},
+        {q: "Mikor értesíthetők a támogató személyek a kliens beleegyezése nélkül?",
+         o: ["Közvetlen életveszély esetén", "Bármikor, ha a tanácsadó szükségesnek látja", "Soha", "Csak írásos bírósági engedéllyel"],
+         e: "Egyébként a kliens beleegyezésével."},
+        {q: "Melyik törvény szabályozza a közvetlen veszély, a sürgősségi gyógykezelés és a korlátozó intézkedések feltételeit?",
+         o: ["1997. évi CLIV. törvény (Egészségügyi törvény)", "2011. évi CXII. törvény", "1997. évi XXXI. törvény", "2013. évi V. törvény"],
+         e: ""},
+        {q: "Mit tartalmaz a szuicid krízisben a klienssel közösen készített vészhelyzeti terv?",
+         o: ["Lépéseket aktuális gondolatok esetére, szorongáscsökkentő gyakorlatokat, megküzdési eszközöket, biztonságos személyek listáját, életfenntartó okokat, sürgősségi elérhetőségeket", "Csak a gyógyszerek listáját", "A kliens végrendeletét", "Kizárólag a tanácsadó telefonszámát"],
+         e: ""},
+        {q: "Melyik szervezet fogalmazta meg a traumainformált szemlélet alapelveit?",
+         o: ["SAMHSA (Substance Abuse and Mental Health Services Administration)", "APA", "EFPA", "BACP"],
+         e: ""},
+        {q: "Mit jelöl a traumainformált szemlélet „három E-je”?",
+         o: ["Event, Experiences, Effects – események, tapasztalatok, hatások", "Empathy, Engagement, Empowerment", "Evaluate, Explore, End", "Ethics, Evidence, Education"],
+         e: "Ez magát a traumát és a kliens igényeit járja körül."},
+        {q: "Melyik a traumainformált szemlélet négy „R-je”?",
+         o: ["Realize, Recognize, Respond, Resist re-traumatization", "Relate, Reflect, Reframe, Repeat", "Rapport, Review, Refer, Report", "Reduce, Reuse, Recycle, Recover"],
+         e: "Felismerés, elismerés, reagálás, az újratraumatizálás elkerülése – a szervezetek, szolgáltatók feladatai."},
+        {q: "Melyek a traumainformált megközelítés kulcselemei (Harris & Fallot, 2001)?",
+         o: ["Biztonság, bizalom, választási lehetőségek, együttműködés, tisztelet", "Gyorsaság, hatékonyság, költségkímélés", "Konfrontáció, értelmezés, feltárás", "Diagnózis, gyógyszer, kontroll"],
+         e: ""},
+        {q: "Mire kell ügyelni csoportos tanácsadásban a traumainformált szemlélet szerint?",
+         o: ["Senki ne osszon meg olyan érzékeny információt, ami miatt később bűntudata, szégyene lenne vagy visszaélésre adna lehetőséget", "Mindenki ossza meg legnehezebb élményét", "Az abúzusról való beszéd kötelező", "A csoportvezető ne figyeljen a tagok állapotára"],
+         e: "Egyéni folyamatban sem kötelezhető a kliens arra, amit nem szeretne elmondani."},
+        {q: "Miért nem helyezhető a döntési potenciál a gyermekekkel való tanácsadás középpontjába?",
+         o: ["A szülőktől való függés miatt", "Mert a gyerekek nem tudnak beszélni", "Mert jogszabály tiltja", "Mert a gyerekeknek nincsenek céljaik"],
+         e: "Minél fiatalabb a gyermek, annál nagyobb a szülők szerepe (Győrfi, 2007)."},
+        {q: "Mi a hangsúly a gyerektanácsadásban (Henderson & Thompson, 2015)?",
+         o: ["A készségfejlesztés (kommunikáció, konfliktuskezelés, tanulási stratégiák) a személyiségformálással szemben", "A személyiség átformálása", "A korai traumák feltárása", "A diagnózisalkotás"],
+         e: "A folyamat prevenciós szemléletű."},
+        {q: "Melyik NEM tipikus indikációja a szülői konzultációnak?",
+         o: ["A szülő pszichiátriai betegségének kezelése", "Normatív krízisek a szülő és a gyermek életében", "Akciószerű krízisek", "Nem krízis esetén jelentkező nehézségek, funkciózavarok a gyermek életében"],
+         e: ""},
+        {q: "Hogyan fejezi ki céljait és szükségleteit gyakran a fiatalabb gyermek a tanácsadásban?",
+         o: ["Nem verbálisan, viselkedésével és érzelmi reakcióival", "Írásban", "Mindig pontosan megfogalmazva", "Csak a szülőn keresztül"],
+         e: "Geldard és mtsai (2013)."},
+        {q: "Melyik díj keretében gyűjtik és osztják meg a pályatanácsadás jó gyakorlatait?",
+         o: ["Euroguidance Pályatanácsadói Díj", "Ritoók Magda-díj", "EuroPsy-díj", "MPT Életműdíj"],
+         e: ""},
+        {q: "Mi készül a karrier- és pályatanácsadás folyamata során?",
+         o: ["Személyre szabott fejlesztési terv rövid és hosszú távú célokkal", "Pszichiátriai diagnózis", "Önéletrajz a tanácsadó helyett", "Munkaszerződés"],
+         e: "Kapcsolatfelvétel → adatgyűjtés, készségfelmérés → információátadás → fejlesztési terv → nyomon követés."}
+      ]
+    },
+    {
+      cim: "Eszközök, adminisztráció, kommunikáció",
+      kerdesek: [
+        {q: "Milyen céllal alkalmazza a teszteket a tanácsadó szakpszichológus?",
+         o: ["Önismereti, támogató és fejlesztő céllal – nem diagnózisalkotásra", "Kizárólag diagnózisalkotásra", "Szelekcióra minden esetben", "A személyes interjú helyettesítésére"],
+         e: "A tesztek nem helyettesítik a személyes interjút vagy a terápiás kapcsolatot."},
+        {q: "Mi a tesztek használatának jogosultsági alapja a „C” típusba sorolásnál?",
+         o: ["Egyetemi szakpszichológusi oklevél (ha a képzés a tesztet magába foglalta) vagy a jogtulajdonos által kiadott tanúsítvány", "Bármely felsőfokú végzettség", "Csak pszichiáteri szakvizsga", "Az MPT-tagság"],
+         e: "Egyénileg elsajátított, gyakran módszerspecifikus képzettséghez kötött."},
+        {q: "Melyik teszt való különösen életpálya- és karriertanácsadásra?",
+         o: ["Holland-féle RIASEC-modell", "WAIS-IV", "PCL-5", "MoCA"],
+         e: "Továbbá: Strong Érdeklődési Kérdőív, Self-Directed Search."},
+        {q: "Melyik mérőeszköz neve: „Rutin Értékelés a Tanácsadási Folyamatban”?",
+         o: ["CORE-OM", "GAD-7", "WHO-5", "BFI"],
+         e: "Tünetbecslő, mentális egészséget mérő kérdőívek között szerepel."},
+        {q: "Melyik a páros/családi működést vizsgáló teszt?",
+         o: ["Dyadic Adjustment Scale (Páros Alkalmazkodási Skála)", "WASI", "16PF", "Rosenberg-féle Önértékelési Skála"],
+         e: "Továbbá: Family Environment Scale, Couples Satisfaction Index."},
+        {q: "Melyik a jóllétet mérő kérdőív?",
+         o: ["WHO-5 Jólléti Index", "PHQ-9", "MoCA", "PCL-5"],
+         e: "Továbbá: Diener SWLS, Ryff-féle Pszichológiai Jóllét Skálák, Rosenberg."},
+        {q: "Melyik dokumentum javasolt az egyéni tanácsadáshoz?",
+         o: ["Esetvezetési lap (adatok, helyzetértékelő diagnózis, esetvezetés lépései, lezárás utáni összefoglaló)", "Jelenléti ív", "Csoporttematika", "Számla a kliens családjának"],
+         e: "Továbbá: használt eszközök listája, adatkezelési hozzájárulás, lemondási/pótlási szabályok elfogadása."},
+        {q: "Melyik dokumentum tartozik a csoportos tanácsadáshoz?",
+         o: ["Jelenléti ív a résztvevők névsorával", "Esetvezetési lap minden tagról", "Kórlap", "Működési engedély"],
+         e: "Továbbá: tematika leírása, záró összefoglaló, hozzájárulási nyilatkozat, ütemezés."},
+        {q: "Milyen feltétellel használható a kliensről készült dokumentum oktatási, tudományos, publikációs célra?",
+         o: ["Csak a kliens beleegyezésével és írásos hozzájárulásával", "Anonimizálva engedély nélkül bármikor", "Az intézményvezető engedélyével", "Sehogy"],
+         e: "A személyes adatok védelme az esetkonzultációkra, szupervíziókra is vonatkozik."},
+        {q: "Mi a tanácsadó szakpszichológus szerepe a szakmaközi teamben?",
+         o: ["Nemcsak egyéni segítő, hanem koordináló, közvetítő és facilitáló szerepet is betölt", "Kizárólag a tesztfelvétel", "A team vezetése minden esetben", "Csak megfigyelő"],
+         e: "Fontos a világos feladatmegosztás és a kompetenciahatárok betartása."},
+        {q: "Mi az integrált pszichológiai ellátás?",
+         o: ["Több egészségügyi és szociális szakterület összehangolt, egymás kompetenciáit kiegészítő ellátási formája", "Egy pszichológus által végzett minden ellátás", "A tanácsadás és a gyógyszeres kezelés egyesítése", "Online és személyes ülések kombinációja"],
+         e: "A hazai gyakorlatban kialakulóban van, de a megvalósulás még hiányos."}
+      ]
+    },
+    {
+      cim: "Szupervízió, továbbképzés, minőség",
+      kerdesek: [
+        {q: "Mit jelent a szupervízió az alapprotokoll szerint?",
+         o: ["Nem felügyeletet, ellenőrzést, hanem tanulási folyamatot, a személyes tapasztalat átdolgozását", "A munkáltatói ellenőrzést", "A teszteredmények ellenőrzését", "Hatósági felügyeletet"],
+         e: "A szupervízió vagy esetmegbeszélő a leghatékonyabb szakmai személyiségfejlesztő módszer."},
+        {q: "Mi áll a szupervízió középpontjában (Ormay, 2025)?",
+         o: ["A szakember személye – „aki végzi a tevékenységet” –, nem maga a tevékenység", "Maga a végzett tevékenység", "A kliens diagnózisa", "Az intézmény gazdálkodása"],
+         e: "Módszertanilag közel áll a pszichoterápiához; rendszeres találkozást igényel."},
+        {q: "Mi a tanácsadói esetmegbeszélés célja?",
+         o: ["A szakmai kompetencia növelése, a szakmai szerep elsajátítása és finomhangolása, a kooperáció és hatékonyság fejlesztése", "A tanácsadó magánéleti problémáinak terápiája", "A kliens diagnózisának felállítása", "Az intézményi ellenőrzés"],
+         e: "Nem feltétele a folyamatszerűség, lehet epizodikus."},
+        {q: "Milyen gyakran javasolt az esetmegbeszélő alkalmak megtartása?",
+         o: ["Legalább kéthetente; havonta egyszer esetén legalább 2×2 órás ülésben", "Évente egyszer", "Csak krízis esetén", "Naponta"],
+         e: "Projektkísérés vagy krízis esetén gyakoribb is lehet."},
+        {q: "Mi a projektkísérés?",
+         o: ["Időben behatárolt, konkrét feladatra szerveződött, intézményen belüli team/csoport szupervíziója", "Egyéni, diádikus esetmegbeszélés", "Vezető nélküli peer group", "Online továbbképzés"],
+         e: "A team-esetmegbeszélés egyik formája; cél a teammunka optimalizálása."},
+        {q: "Mi jellemzi a peer group-esetmegbeszélőt?",
+         o: ["Explicit vezetés nélküli, a csoport a korábban elsajátított módszerekkel önállóan dolgozik", "Mindig külső szupervizor vezeti", "Egy fő vesz részt rajta", "Hierarchikus, értékelő folyamat"],
+         e: "A tanácsadói esetmegbeszélő csoport kiteljesedése."},
+        {q: "Hány fős peer group javasolt (Tietze, 2002)?",
+         o: ["6–9 fő", "2–3 fő", "12–15 fő", "20 fő felett"],
+         e: ""},
+        {q: "Melyik a peer group-szupervízió hat fázisa helyes sorrendben?",
+         o: ["Szerepkijelölés → esetbemutatás → kulcskérdés → módszerválasztás → konzultáció → konklúzió", "Esetbemutatás → szerepkijelölés → konzultáció → kulcskérdés → módszerválasztás → konklúzió", "Kulcskérdés → esetbemutatás → konzultáció → szerepkijelölés → konklúzió → módszerválasztás", "Módszerválasztás → szerepkijelölés → esetbemutatás → kulcskérdés → konklúzió → konzultáció"],
+         e: "Tietze (2002)."},
+        {q: "Melyik szerepet jelölik ki elsőként a peer group szerepkijelölési fázisában?",
+         o: ["A moderátort, aki mindvégig segíti a folyamatot", "Az esethozót", "A titkárt", "A konzultánsokat"],
+         e: "Három fő szerep: esetbemutató, moderátor, tanácsadók (konzultánsok); egyikük titkárként jegyzetel."},
+        {q: "Mit tesz az esetbemutató a konzultáció fázisában?",
+         o: ["Figyelmesen hallgat, míg a tanácsadók a választott modul szerint megosztják ötleteiket", "Folyamatosan vitatkozik a javaslatokkal", "Moderálja a beszélgetést", "Elhagyja a termet"],
+         e: "A jegyző rögzíti a legfontosabb üzeneteket."},
+        {q: "Melyik a megbízható peer group-légkör négy összetevője?",
+         o: ["Felelősség, bizalom, támogatás, értékelés", "Empátia, elfogadás, hitelesség, jelenlét", "Gyorsaság, pontosság, hatékonyság, kontroll", "Biztonság, választás, együttműködés, tisztelet"],
+         e: "Nagyobb belső konfliktus esetén külső szakember segítsége kell."},
+        {q: "Mikor rendezik meg a Pszichológiai Tanácsadás Konferenciát?",
+         o: ["Minden év novemberében (MPT és ELTE PPK Pszichológiai Intézet közös szervezésében)", "Minden év márciusában", "Kétévente szeptemberben", "Minden nyáron"],
+         e: ""},
+        {q: "Mi adja a jogosultságot egy módszer használatára, és mit engedélyeznek az egyesületek?",
+         o: ["Az alapképesítés adja a jogosultságot; az egyesületek a módszerspecifikus cím használatát engedélyezik", "Az egyesület adja a jogosultságot a pszichoterápiára", "Az OKFŐ minden módszert külön engedélyez", "A kliens hozzájárulása adja a jogosultságot"],
+         e: ""},
+        {q: "Ki hozza a végső döntést arról, hogy egy módszer a pszichoterapeuta képzésben elfogadottá válik-e?",
+         o: ["Az OKFŐ (Országos Kórházi Főigazgatóság)", "A Pszichoterápiás Tanács Szövetség", "Az MPT", "Az ELTE PPK"],
+         e: "Az orvosegyetemek pszichoterápiás grémiumai ajánlanak, a kari tanácsok döntenek; a Pszichoterápiás Tanács Szövetségnek nincs döntési szerepe."},
+        {q: "Milyen mérőeszközzel mérte az ELTE Életvezetési Tanácsadás a hallgatói tanácsadás hatékonyságát?",
+         o: ["OQ-39 (az Outcome Questionnaire-45.2 magyar, 39 tételes változata)", "BDI-II", "MBI", "CORE-OM"],
+         e: "215 résztvevő, átlagosan 6 alkalom; szignifikáns javulás, a legnagyobb a súlyosabb állapotban bejelentkezőknél."},
+        {q: "Kik érték el a legnagyobb fejlődést az ELTE OQ-39-es vizsgálatában?",
+         o: ["A súlyosabb állapotban bejelentkezők", "Az enyhe tünetekkel érkezők", "A nemzetközi hallgatók", "Az elsőévesek"],
+         e: "Még rövid, strukturált folyamatok is hatékonyak lehetnek."},
+        {q: "Hány tanácskérőt látott el a TÁMOP 2.2.2. keretében felépülő életpálya-tanácsadói hálózat?",
+         o: ["26 692 főt", "2 097 főt", "215 főt", "100 000 főt"],
+         e: "Személyes tanácsadásnál a lehetséges pontszám 98,37%-át adták az ügyfelek."},
+        {q: "Mit ajánl az alapprotokoll a hatékonyságmérés egységesítésére?",
+         o: ["Egységes tesztbattéria kiépítését, amelyhez területspecifikus kérdések illeszthetők", "Minden intézmény saját kérdőívét", "A mérés megszüntetését", "Csak kvalitatív interjúkat"],
+         e: "Példa lehet az OQ-45.2 magyar változata."},
+        {q: "Hány tanulmányt tekint át Larson és Daniels 1998-as összegző tanulmánya a tanácsadói énhatékonyságról?",
+         o: ["32-t", "37-et", "45-öt", "10-et"],
+         e: "A BACP 2013-ban 37 tanulmány alapján támasztotta alá a tanácsadás és pszichoterápia hatékonyságát."},
+        {q: "Mit mutatnak a nemzetközi orvosi modellben végzett vizsgálatok a klinikai depresszióról?",
+         o: ["A tanácsadás a gyógyszeres kezeléssel összehasonlítva jobb eredményeket mutat, hosszú távon is (relapszus-megelőzés)", "A tanácsadás hatástalan depresszióban", "Csak gyógyszerrel együtt hatásos", "Rövid távon jobb, hosszú távon rosszabb"],
+         e: "Chilvers et al., 2001; Rowland et al., 2000; Ward et al., 2000."}
+      ]
+    }
+  ]
+});
+
+</script>
+
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const LS = "kikerdezo.v1.";
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(LS+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(LS+k, JSON.stringify(v)); }catch(e){} }
+};
+
+/* --- kérdés-azonosító: tananyag + a kérdés szövegének hash-e --- */
+function hash(str){ let h = 2166136261; for (let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return (h>>>0).toString(36); }
+
+/* --- adatok előkészítése --- */
+const ALL = [];   // minden kérdés lapítva
+SETS.forEach((s, si) => {
+  s.temak.forEach((t, ti) => {
+    t.kerdesek.forEach(k => {
+      ALL.push({ id: s.id + ":" + hash(k.q), set: s, si, ti, topic: t.cim, q: k.q, o: k.o, e: k.e || "" });
+    });
+  });
+});
+
+let stats = store.get("stats", {});            // {qid:{j,h,u}}  j=jó, h=hibás, u=utolsó (1/0)
+let sel = store.get("sel", null);              // {setId:[topicIndex,...]}
+let opt = Object.assign({count:20, mode:"mix"}, store.get("opt", {}));
+if (!sel){ sel = {}; SETS.forEach(s => sel[s.id] = s.temak.map((_,i)=>i)); }
+
+/* ================= KEZDŐKÉPERNYŐ ================= */
+const CHECK = '<svg viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5l3 3 6-7"/></svg>';
+const CHEV = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l4 4 4-4"/></svg>';
+
+function qsOf(setId, ti){ return ALL.filter(x => x.set.id === setId && (ti === undefined || x.ti === ti)); }
+function mastery(list){
+  let g=0,b=0; list.forEach(x => { const st = stats[x.id]; if (st){ st.u ? g++ : b++; } });
+  return {g, b, n:list.length};
+}
+function isNew(s){ if (!s.felveve) return false; const d = (Date.now() - new Date(s.felveve).getTime())/864e5; return d >= 0 && d < 14; }
+function esc(t){ return String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function renderHome(){
+  // összegzés
+  const m = mastery(ALL);
+  $("#summary").innerHTML =
+    `<span class="pill"><b>${SETS.length}</b> tananyag</span>` +
+    `<span class="pill"><b>${ALL.length}</b> kérdés</span>` +
+    `<span class="pill">tudott: <b>${m.g}</b> / ${ALL.length}</span>`;
+
+  // csoportosítás tárgy szerint, megtartva a felvétel sorrendjét
+  const groups = [];
+  SETS.forEach(s => { let g = groups.find(x => x.t === (s.targy||"Egyéb")); if (!g){ g = {t:s.targy||"Egyéb", s:[]}; groups.push(g); } g.s.push(s); });
+
+  const box = $("#sets"); box.innerHTML = "";
+  groups.forEach(g => {
+    const h = document.createElement("div"); h.className = "group-title"; h.textContent = g.t; box.appendChild(h);
+    g.s.forEach(s => {
+      const chosen = sel[s.id] || [];
+      const full = chosen.length === s.temak.length, part = chosen.length > 0 && !full;
+      const list = qsOf(s.id), mm = mastery(list);
+      const el = document.createElement("div");
+      el.className = "set" + (full ? " on" : "") + (openSets.has(s.id) ? " open" : "");
+      el.innerHTML = `
+        <div class="set-main" role="checkbox" tabindex="0" aria-checked="${full?"true":part?"mixed":"false"}">
+          <div class="chk${part?" part":""}">${part?"":CHECK}</div>
+          <div class="set-txt">
+            <p class="set-title">${esc(s.cim)}${isNew(s)?'<span class="badge">új</span>':""}${s.fajl?` <span class="set-file">(${esc(s.fajl)})</span>`:""}</p>
+            <div class="set-meta">${list.length} kérdés · ${s.temak.length} témakör${s.forras?" · "+esc(s.forras):""}</div>
+            <div class="mastery"><div class="bar"><i class="g" style="width:${mm.g/mm.n*100}%"></i><i class="b" style="width:${mm.b/mm.n*100}%"></i></div><span>${mm.g}/${mm.n}</span></div>
+          </div>
+          <button class="expand" aria-label="Témakörök" aria-expanded="${openSets.has(s.id)}">${CHEV}</button>
+        </div>
+        <div class="topics">${s.temak.map((t,ti) => {
+            const on = chosen.includes(ti), tm = mastery(qsOf(s.id, ti));
+            return `<div class="topic" role="checkbox" tabindex="0" aria-checked="${on}" data-ti="${ti}"><div class="chk${on?" on":""}">${CHECK}</div><span>${esc(t.cim)}</span><em>${tm.g}/${tm.n}</em></div>`;
+          }).join("")}</div>`;
+      const main = el.querySelector(".set-main");
+      const toggleSet = () => { sel[s.id] = full ? [] : s.temak.map((_,i)=>i); save(); renderHome(); };
+      main.addEventListener("click", e => { if (e.target.closest(".expand")) return; toggleSet(); });
+      main.addEventListener("keydown", e => { if (e.key===" "||e.key==="Enter"){ e.preventDefault(); toggleSet(); } });
+      el.querySelector(".expand").addEventListener("click", e => { e.stopPropagation(); openSets.has(s.id) ? openSets.delete(s.id) : openSets.add(s.id); renderHome(); });
+      el.querySelectorAll(".topic").forEach(tp => {
+        const ti = +tp.dataset.ti;
+        const tog = () => { const a = new Set(sel[s.id]||[]); a.has(ti) ? a.delete(ti) : a.add(ti); sel[s.id] = [...a].sort((x,y)=>x-y); save(); renderHome(); };
+        tp.addEventListener("click", tog);
+        tp.addEventListener("keydown", e => { if (e.key===" "||e.key==="Enter"){ e.preventDefault(); tog(); } });
+      });
+      box.appendChild(el);
+    });
+  });
+
+  // beállítás-gombok
+  document.querySelectorAll("#segCount button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.v === opt.count)));
+  document.querySelectorAll("#segMode button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === opt.mode)));
+  $("#modeHint").textContent = {mix:"véletlen sorrend", weak:"előbb a rontott és még nem látott kérdések", wrong:"csak amit legutóbb elrontottál"}[opt.mode];
+
+  const anySel = Object.values(sel).some(a => a.length);
+  $("#toggleAll").textContent = SETS.every(s => (sel[s.id]||[]).length === s.temak.length) ? "Kijelölés törlése" : "Mind kijelöl";
+
+  const pool = buildPool();
+  const n = opt.count ? Math.min(opt.count, pool.length) : pool.length;
+  const st = $("#start");
+  st.disabled = n === 0;
+  st.textContent = !anySel ? "Válassz tananyagot" : n === 0 ? (opt.mode==="wrong" ? "Nincs hibás kérdés a kijelöltekben" : "Nincs kérdés") : `Indítás · ${n} kérdés`;
+
+  const last = SETS.map(s => s.felveve).filter(Boolean).sort().pop();
+  $("#footInfo").textContent = last ? `Utoljára bővítve: ${last.replace(/-/g,". ")}.` : "";
+}
+const openSets = new Set();
+function save(){ store.set("sel", sel); store.set("opt", opt); }
+
+document.querySelectorAll("#segCount button").forEach(b => b.addEventListener("click", () => { opt.count = +b.dataset.v; save(); renderHome(); }));
+document.querySelectorAll("#segMode button").forEach(b => b.addEventListener("click", () => { opt.mode = b.dataset.v; save(); renderHome(); }));
+$("#toggleAll").addEventListener("click", () => {
+  const allOn = SETS.every(s => (sel[s.id]||[]).length === s.temak.length);
+  SETS.forEach(s => sel[s.id] = allOn ? [] : s.temak.map((_,i)=>i)); save(); renderHome();
+});
+let resetArmed = null;
+$("#resetStats").addEventListener("click", e => {
+  const b = e.currentTarget;
+  if (!resetArmed){ b.textContent = "Biztosan törlöd? Koppints újra"; resetArmed = setTimeout(() => { resetArmed = null; b.textContent = "Statisztika törlése"; }, 3500); return; }
+  clearTimeout(resetArmed); resetArmed = null; b.textContent = "Statisztika törlése";
+  stats = {}; store.set("stats", stats); renderHome();
+});
+
+/* ================= KÉRDÉSSOR ÖSSZEÁLLÍTÁSA ================= */
+function shuffle(a){ a = a.slice(); for (let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function buildPool(){
+  let pool = ALL.filter(x => (sel[x.set.id]||[]).includes(x.ti));
+  if (opt.mode === "wrong") pool = pool.filter(x => stats[x.id] && !stats[x.id].u);
+  return pool;
+}
+function weakScore(x){ const st = stats[x.id]; if (!st) return 1; if (!st.u) return 0; return 2 + Math.min(st.j,5) - st.h*0.5; }
+
+/* ================= KVÍZ ================= */
+let run = null;
+function startRun(list){
+  if (!list.length) return;
+  run = { list, i:0, good:0, answers:[] };
+  show("quiz"); renderQ();
+}
+$("#start").addEventListener("click", () => {
+  let pool = buildPool();
+  if (opt.mode === "weak"){
+    pool = shuffle(pool).sort((a,b) => weakScore(a) - weakScore(b));
+  } else pool = shuffle(pool);
+  if (opt.count) pool = pool.slice(0, opt.count);
+  if (opt.mode === "weak") pool = shuffle(pool);
+  startRun(pool);
+});
+
+function renderQ(){
+  const x = run.list[run.i];
+  run.cur = { x, order: shuffle(x.o.map((t,i)=>({t, ok:i===0}))), done:false };
+  $("#progFill").style.width = (run.i / run.list.length * 100) + "%";
+  $("#progTxt").textContent = `${run.i+1} / ${run.list.length}`;
+  $("#scoreTxt").textContent = run.i ? `${run.good} jó` : "";
+  $("#qsrc").innerHTML = esc(x.set.cim + " · " + x.topic) + (x.set.fajl ? ` <span class="set-file">(${esc(x.set.fajl)})</span>` : "");
+  $("#qtext").textContent = x.q;
+  $("#fb").innerHTML = "";
+  const box = $("#opts"); box.innerHTML = "";
+  run.cur.order.forEach((o, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = `<span class="k">${"ABCD"[k]||k+1}</span><span>${esc(o.t)}</span>`;
+    b.addEventListener("click", () => answer(k));
+    box.appendChild(b);
+  });
+  $("#qdock").classList.add("hidden");
+  window.scrollTo({top:0});
+}
+function answer(k){
+  if (run.cur.done) return;
+  run.cur.done = true;
+  const {x, order} = run.cur, ok = order[k].ok;
+  const btns = [...document.querySelectorAll("#opts .opt")];
+  btns.forEach((b,i) => { b.disabled = true; if (order[i].ok) b.classList.add("ok"); else if (i===k) b.classList.add("no"); else b.classList.add("dim"); });
+  if (ok) run.good++;
+  run.answers.push({x, ok, chosen: order[k].t});
+  const st = stats[x.id] || {j:0,h:0,u:0};
+  ok ? st.j++ : st.h++; st.u = ok ? 1 : 0; stats[x.id] = st; store.set("stats", stats);
+  const right = order.find(o=>o.ok).t;
+  $("#fb").innerHTML = `<div class="fb ${ok?"ok":"no"}"><strong>${ok ? pick(["Így van!","Pontosan.","Helyes!","Szép!"]) : "Nem egészen."}</strong>${ok ? "" : `A helyes válasz: <b>${esc(right)}</b>. `}${esc(x.e)}</div>`;
+  $("#scoreTxt").textContent = `${run.good} jó`;
+  $("#next").textContent = run.i+1 < run.list.length ? "Következő" : "Eredmény";
+  $("#qdock").classList.remove("hidden");
+  $("#next").focus({preventScroll:true});
+}
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+$("#next").addEventListener("click", () => { run.i++; run.i < run.list.length ? renderQ() : renderResult(); });
+$("#quit").addEventListener("click", () => {
+  run = null; show("home");
+});
+document.addEventListener("keydown", e => {
+  if ($("#quiz").classList.contains("hidden") || !run) return;
+  if (/^[1-4]$/.test(e.key) && !run.cur.done){ const k = +e.key-1; if (k < run.cur.order.length) answer(k); }
+  else if (e.key === "Enter" && run.cur.done){ e.preventDefault(); $("#next").click(); }
+});
+
+/* ================= EREDMÉNY ================= */
+function renderResult(){
+  const n = run.list.length, g = run.good, p = Math.round(g/n*100);
+  const missed = run.answers.filter(a => !a.ok);
+  const verdict = p >= 90 ? "Kiváló – ez megy!" : p >= 75 ? "Jó eredmény." : p >= 50 ? "Alakul, érdemes átismételni a hibásakat." : "Ezt még érdemes újra átnézni.";
+  $("#result").innerHTML = `
+    <div class="result">
+      <div class="eyebrow">Eredmény</div>
+      <div class="score">${p}%</div>
+      <div class="verdict">${verdict}</div>
+      <div class="sub">${g} jó válasz ${n} kérdésből</div>
+    </div>
+    <div class="actions">
+      ${missed.length ? `<button class="btn" id="rMiss">A ${missed.length} hibás újra</button>` : ""}
+      <button class="btn ${missed.length?"ghost":""}" id="rAgain">Új kör ugyanebből</button>
+      <button class="btn ghost" id="rHome">Vissza a tananyagokhoz</button>
+    </div>
+    ${missed.length ? `<h3 class="miss-h">Amit elrontottál</h3><ul class="miss">${missed.map(a => `
+      <li><div class="mq">${esc(a.x.q)}</div>
+      <div class="mw">${esc(a.chosen)}</div>
+      <div class="ma">${esc(a.x.o[0])}</div>
+      ${a.x.e ? `<div class="me">${esc(a.x.e)}</div>` : ""}</li>`).join("")}</ul>` : ""}`;
+  show("result");
+  const list = run.list;
+  if (missed.length) $("#rMiss").onclick = () => startRun(shuffle(missed.map(a => a.x)));
+  $("#rAgain").onclick = () => startRun(shuffle(list));
+  $("#rHome").onclick = () => { run = null; show("home"); };
+}
+
+function show(v){
+  ["home","quiz","result"].forEach(id => $("#"+id).classList.toggle("hidden", id !== v));
+  $("#dock").classList.toggle("hidden", v !== "home");
+  if (v !== "quiz") $("#qdock").classList.add("hidden");
+  if (v === "home") renderHome();
+  window.scrollTo({top:0});
+}
+
+renderHome();
+})();
+</script>
+</body>
+</html>
